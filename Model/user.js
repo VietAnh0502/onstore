@@ -32,7 +32,8 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  refreshTokens: [String], // Added refreshTokens field to store refresh tokens for the user
 });
 
 // Create and export the User model

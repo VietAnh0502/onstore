@@ -1,12 +1,15 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const connectDB = require('./db/database'); // Ensure this path is correct
 const userRoutes = require('./routes/usersController'); // Import the user routes
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 // Middleware
 app.use(express.json()); // For parsing application/json
+app.use(cookieParser()); // For parsing cookies
 
 // Use user routes
 app.use(userRoutes); // Prefix for user endpoints
