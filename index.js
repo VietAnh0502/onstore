@@ -1,7 +1,9 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const connectDB = require('./db/database'); // Ensure this path is correct
-const userRoutes = require('./routes/usersController'); // Import the user routes
+const connectDB = require('./db/database'); 
+const userRoutes = require('./routes/usersController'); 
+const productRoutes = require('./routes/productController'); 
+const cartRoutes = require('./routes/cartController');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +15,7 @@ app.use(cookieParser()); // For parsing cookies
 
 // Use user routes
 app.use(userRoutes); // Prefix for user endpoints
+app.use(productRoutes); // This will prefix all product routes
 
 async function startServer() {
   await connectDB();  // Connect to database
