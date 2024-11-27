@@ -4,10 +4,11 @@ const shopModel = require("../models/shop.model")
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const KeyTokenService = require("./keyToken.service")
-const createTokenPair = require("../auth/authUtils")
+const { createTokenPair } = require("../auth/authUtils")
 const { getInfoData } = require('../utils')
 const { BadRequestError, ConflictRequestError, AuthFailureError } = require("../core/error.response")
 const { findByEmail } = require("./shop.service")
+
 
 const RoleShop = {
 	SHOP: 'shop',
@@ -16,6 +17,12 @@ const RoleShop = {
 	ADMIN: 'ADMIN'
 }
 class AccessService {
+
+	static logout = async (keyStore) => {
+		return delKey = await KeyTokenService.removeKeyById(keyStore._id)
+		console.log({ delKey })
+		return delKey
+	}
 
 	//check email, password
 	//tạo accsess token refeshtoken
