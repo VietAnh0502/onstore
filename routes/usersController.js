@@ -19,7 +19,7 @@ router.post('/users/registration', async (req, res) => {
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, email, password: hashedPassword, refreshTokens: []});
+    const newUser = new User({ username, email, password: hashedPassword, refreshTokens: [] });
     await newUser.save();
     res.status(201).json(newUser);
   } catch (error) {
@@ -53,7 +53,7 @@ router.post('/users/registration', async (req, res) => {
 //   }
 // });
 
-
+//test 
 // User login
 router.post('/users/login', async (req, res) => {
   try {
@@ -92,7 +92,7 @@ router.post('/users/login', async (req, res) => {
 });
 
 // Refresh access token using refresh token
-router.post('/users/refresh',verifyRefreshToken, async (req, res) => {
+router.post('/users/refresh', verifyRefreshToken, async (req, res) => {
   // The refresh token is already verified in the middleware,
   // so we can create a new access token
   const newAccessToken = jwt.sign({ id: req.user.id }, JWT_SECRET, { expiresIn: '30s' });
@@ -105,7 +105,7 @@ router.post('/users/logout', async (req, res) => {
   if (!refreshToken) {
     return res.status(400).json({ message: 'Refresh token required' });
   }
-  
+
   try {
     // Find the user by checking the refresh token
     const user = await User.findOne({ refreshTokens: refreshToken });
@@ -125,7 +125,7 @@ router.post('/users/logout', async (req, res) => {
 });
 
 // Get all users
-router.get('/api/users',verifyAccessToken, async (req, res) => {
+router.get('/api/users', verifyAccessToken, async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
