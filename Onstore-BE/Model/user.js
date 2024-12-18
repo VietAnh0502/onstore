@@ -19,15 +19,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 6,
-    select: false // This field will not be included when the user is returned in queries
+    select: false 
   },
   height: {
-    type: Number, // Fix: ensure you have defined this as a number type
-    required: false, // Optional field
+    type: Number,
+    required: false, 
   },
   weight: {
-    type: Number, // Added weight field
-    required: false, // Optional field
+    type: Number,
+    required: false,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'user', 'guest', 'employee'],
+    default: 'user', 
   },
   createdAt: {
     type: Date,

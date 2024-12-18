@@ -5,13 +5,13 @@ const mongoose = require('mongoose');
 const reviewSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true, // Require a username for each review
+    required: true, 
   },
   rating: {
     type: Number,
     required: true,
-    min: 1, // Minimum rating
-    max: 5,  // Maximum rating
+    min: 1, 
+    max: 5,  
   },
   text: {
     type: String,
@@ -31,6 +31,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  coll: {
+    type: mongoose.Schema.Types.ObjectId, // Reference to the Collection model
+    required: true,
+    ref: 'Collection', // The name of the collection model
+  },
   price: {
     type: Number,
     required: true,
@@ -39,9 +44,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: [
-      'Men',
-      'Women',
-      'Children',
+      'Women', //can be expand to selling for man and childern
     ],
   },
   type: {

@@ -2,6 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Model/product');
+const arthorizeRole = require('../Middleware/arthorizeRole');
+const validateAccessToken = require('../Middleware/arthorizeToken');
+
+//protect product controller with roleMiddleware and artorizeTokenMiddleware
+//router.use(validateAccessToken);
+//router.use(arthorizeRole('admin','employee'));
+
 
 // Create a new product
 router.post('/api/products', async (req, res) => {

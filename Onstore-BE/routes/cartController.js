@@ -6,22 +6,7 @@ const User = require('../Model/user');
 const Product = require('../Model/product');
 const verifyAccessToken = require('../Middleware/verifyAuthAccess');
 const verifyRefreshToken = require('../Middleware/verifyRefresh');
-
-// Middleware to verify access token and refresh if needed
-const validateAccessToken = async (req, res, next) => {
-    try {
-        // First, verifyAccessToken middleware will check if the access token is valid
-        await verifyAccessToken(req, res, next);
-    } catch (error) {
-        // If the access token verification fails, check for a refresh token
-        if (error.status === 403) {
-            // Attempt to refresh the token
-            await verifyRefreshToken(req, res, next);
-        } else {
-            res.status(403).json({ message: 'Forbidden' });
-        }
-    }
-};
+const validateAccessToken = require('../Middleware/arthorizeToken');
 
 // Apply middleware for all cart routes
 router.use(validateAccessToken);
@@ -113,7 +98,7 @@ router.put('/api/carts/:cartId/items/:itemId', async (req, res) => {
 // Get cart details for a user
 router.get('/api/carts/:cartId', async (req, res) => {
     try {
-        const cart = await Cart.findById(req.params.cartId).populate('items.product');
+        const cart = await Cart.findOne({ user: req.user.id }).populate('items.product');
         if (!cart) return res.status(404).json({ message: 'Cart not found' });
         res.status(200).json(cart);
     } catch (error) {

@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const verifyAccessToken = require('../Middleware/verifyAuthAccess.js');
 const verifyRefreshToken = require('../Middleware/verifyRefresh.js');
+const arthorizeRole = require('../Middleware/arthorizeRole');
 
 require('dotenv').config();
 
@@ -14,12 +15,19 @@ const JWT_SECRET_REFRESH = process.env.REFRESH_TOKEN_SECRET;
 // Create a new user
 router.post('/users/registration', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, email, password: hashedPassword, refreshTokens: []});
+    const newUser = new User({ 
+        username, 
+        email, 
+        password: hashedPassword,
+        role: role || 'user',
+        refreshTokens: []
+    });
+
     await newUser.save();
     res.status(201).json(newUser);
   } catch (error) {
@@ -27,35 +35,8 @@ router.post('/users/registration', async (req, res) => {
   }
 });
 
-// // User login
-// router.post('/users/login', async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     // Find the user by email
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     // Compare the provided password with the hashed password
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: 'Invalid credentials' });
-//     }
-
-//     // Generate JWT token
-//     const ACCESS_TOKEN = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '30s' }); // Token valid for 1 hour
-//     const REFRESH_TOKEN = jwt.sign({ id: user._id }, JWT_SECRET_REFRESH, { expiresIn: '7d' });
-//     res.status(200).json({ accessToken: ACCESS_TOKEN, refreshToken: REFRESH_TOKEN });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// });
-
-
 // User login
-router.post('/users/login', async (req, res) => {
+router.post('/api/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -92,7 +73,7 @@ router.post('/users/login', async (req, res) => {
 });
 
 // Refresh access token using refresh token
-router.post('/users/refresh',verifyRefreshToken, async (req, res) => {
+router.post('/api/users/refresh',verifyRefreshToken, async (req, res) => {
   // The refresh token is already verified in the middleware,
   // so we can create a new access token
   const newAccessToken = jwt.sign({ id: req.user.id }, JWT_SECRET, { expiresIn: '30s' });
@@ -100,7 +81,7 @@ router.post('/users/refresh',verifyRefreshToken, async (req, res) => {
 });
 
 // Logout user and invalidate refresh token
-router.post('/users/logout', async (req, res) => {
+router.post('/api/users/logout', async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return res.status(400).json({ message: 'Refresh token required' });
@@ -125,7 +106,7 @@ router.post('/users/logout', async (req, res) => {
 });
 
 // Get all users
-router.get('/api/users',verifyAccessToken, async (req, res) => {
+router.get('/api/users',verifyRefreshToken,arthorizeRole('admin'), async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
