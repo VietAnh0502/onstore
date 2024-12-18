@@ -1,3 +1,4 @@
+//xác thực jwt
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET;
@@ -14,7 +15,7 @@ const verifyToken = (req, res, next) => {
     if (err) {
       return res.sendStatus(403); // Forbidden if token is invalid
     }
-    
+
     req.user = user; // Store user information in request
     next(); // Move to the next middleware or route handler
   });

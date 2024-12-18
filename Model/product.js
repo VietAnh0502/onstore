@@ -1,3 +1,4 @@
+//schema product
 // product.js
 const mongoose = require('mongoose');
 

@@ -1,3 +1,5 @@
+
+//verify token
 const jwt = require('jsonwebtoken');
 const User = require('../Model/user');
 require('dotenv').config();

@@ -1,3 +1,4 @@
+//xử lý đường dẫn cart
 // Import necessary modules and middleware
 const express = require('express');
 const router = express.Router();
@@ -46,7 +47,7 @@ router.post('/api/carts/:cartId/items', async (req, res) => {
         if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
         const existingItem = cart.items.find(item => item.product.toString() === productId);
-        
+
         if (existingItem) {
             // Update quantity if item already exists
             existingItem.quantity += quantity;
@@ -80,7 +81,7 @@ router.delete('/api/carts/:cartId/items/:itemId', async (req, res) => {
 
         cart.items.splice(itemIndex, 1);
         await cart.save();
-        res.status(204).send(); 
+        res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -99,7 +100,7 @@ router.put('/api/carts/:cartId/items/:itemId', async (req, res) => {
         // Adjust total price before updating quantity
         const product = await Product.findById(item.product);
         cart.total -= item.quantity * product.price;
-        
+
         item.quantity = quantity; // Update quantity
         cart.total += quantity * product.price; // Update total
 

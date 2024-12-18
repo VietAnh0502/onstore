@@ -1,4 +1,5 @@
 // productController.js
+//router productController
 const express = require('express');
 const router = express.Router();
 const Product = require('../Model/product');
@@ -67,7 +68,7 @@ router.post('/api/products/:id/reviews', async (req, res) => {
     const review = { username, rating, text };
     product.reviews.push(review);
     await product.save();
-    
+
     res.status(201).json(review);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -79,7 +80,7 @@ router.get('/api/products/:id/reviews', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id).select('reviews');
     if (!product) return res.status(404).json({ message: 'Product not found' });
-    
+
     res.status(200).json(product.reviews);
   } catch (error) {
     res.status(500).json({ error: error.message });

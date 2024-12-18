@@ -1,3 +1,4 @@
+//schema cart
 const mongoose = require('mongoose');
 
 // Define the CartItem schema to store products and their quantities
