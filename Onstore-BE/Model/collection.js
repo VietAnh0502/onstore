@@ -9,9 +9,13 @@ const collectionSchema = new mongoose.Schema({
     unique: true, // Ensure collection names are unique
     trim: true,
   },
+  images: {
+    type: [String],
+    required: false,
+  },
   description: {
     type: String,
-    required: false, // Optional field for a description
+    required: false, 
   },
   createdAt: {
     type: Date,

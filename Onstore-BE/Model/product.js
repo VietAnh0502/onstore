@@ -48,18 +48,9 @@ const productSchema = new mongoose.Schema({
     ],
   },
   type: {
-    type: String,
-    required: true,
-    enum: [
-      'Outdoor',
-      'Sport',
-      'Luxury',
-      'Casual',
-      'Formal',
-      'Activewear',
-      'Sleepwear',
-      'Loungewear',
-    ],
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
+    ref: 'productType', // Make sure to add a comma here
   },
   size: {
     type: String,
