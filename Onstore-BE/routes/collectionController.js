@@ -6,8 +6,8 @@ const arthorizeRole = require('../Middleware/arthorizeRole');
 const validateAccessToken = require('../Middleware/arthorizeToken');
 
 //protect product controller with roleMiddleware and artorizeTokenMiddleware
-router.use(validateAccessToken);
-router.use(arthorizeRole('admin','employee'));
+//router.use(validateAccessToken);
+//router.use(arthorizeRole('admin','employee'));
 
 // Create a new collection
 router.post('/api/collections', async (req, res) => {

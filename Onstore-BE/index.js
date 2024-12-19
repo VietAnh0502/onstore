@@ -20,9 +20,10 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing, accpting call to api
 // Use user routes
 app.use(userRoutes); 
 app.use(productRoutes); 
+app.use(collectionRoutes);
 app.use(cartRoutes); 
 app.use(reviewRoutes);
-app.use(collectionRoutes);
+
 
 
 

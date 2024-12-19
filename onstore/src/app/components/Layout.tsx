@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </nav>
 
         <nav className="flex items-center ml-4">
-          {/* Search icon and button */}
+          {/* Search icon */}
           <div className="flex items-center relative mr-4">
             <button
               onClick={() => setSearchVisible(!isSearchVisible)} // Toggle search box visibility

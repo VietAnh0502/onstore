@@ -1,5 +1,5 @@
 export default function register() {
     return (
-        <h1>This is register page</h1>
-    );
+        <h1> Register </h1>
+    )
 }

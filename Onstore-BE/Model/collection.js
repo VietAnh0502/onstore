@@ -10,7 +10,7 @@ const collectionSchema = new mongoose.Schema({
     trim: true,
   },
   images: {
-    type: [String],
+    type: String,
     required: false,
   },
   description: {

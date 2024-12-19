@@ -1,5 +1,5 @@
 export default function login() {
     return (
-        <h1>This is login page</h1>
-    );
+        <h1> Login </h1>
+    )
 }

@@ -7,7 +7,7 @@ const verifyRefreshToken = async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken; // Get refresh token from cookies
 
     if (!refreshToken) {
-        return res.sendStatus(401).json({ message: 'Forbidden at verifyRefresh' }); // Unauthorized if no refresh token is provided
+        return res.sendStatus(401); // Unauthorized if no refresh token is provided
     }
 
     try {
