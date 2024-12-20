@@ -93,4 +93,29 @@ router.get('/api/products/:id/reviews', async (req, res) => {
   }
 });
 
+
+// Add or update size stock for a product
+router.put('/api/products/:id/sizeStock', async (req, res) => {
+  const { size, quantity } = req.body;
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    // Check if the size already exists in the sizeStock
+    const sizeStock = product.sizeStock.find(item => item.size === size);
+
+    if (sizeStock) {
+      // Update existing size stock
+      sizeStock.quantity = quantity;
+    } else {
+      // Add new size stock
+      product.sizeStock.push({ size, quantity });
+    }
+    
+    await product.save(); // Save the updated product
+    res.status(200).json(product.sizeStock); // You might want to return the entire product or just the updated sizeStock
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;

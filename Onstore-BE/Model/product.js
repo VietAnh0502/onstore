@@ -19,6 +19,22 @@ const reviewSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+// Define the SizeStock schema to manage sizes and their quantities
+const sizeStockSchema = new mongoose.Schema({
+  size: {
+    type: String,
+    required: true,
+    enum: [
+      'XS', 'S', 'M', 'L', 'XL', 'XXL',
+    ],
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 0, // Minimum stock quantity
+  },
+});
+
 // Define the Product schema for clothing items
 const productSchema = new mongoose.Schema({
   name: {
@@ -34,7 +50,7 @@ const productSchema = new mongoose.Schema({
   coll: {
     type: mongoose.Schema.Types.ObjectId, // Reference to the Collection model
     required: true,
-    ref: 'Collection', // The name of the collection model
+    ref: 'Collection',
   },
   price: {
     type: Number,
@@ -44,21 +60,15 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: [
-      'Women', //can be expand to selling for man and childern
+      'Women', //can be expand to selling for man and children
     ],
   },
   type: {
     type: [mongoose.Schema.Types.ObjectId],
     required: false,
-    ref: 'productType', // Make sure to add a comma here
+    ref: 'productType',
   },
-  size: {
-    type: String,
-    required: true,
-    enum: [
-      'XS', 'S', 'M', 'L', 'XL', 'XXL',
-    ],
-  },
+  sizeStock: [sizeStockSchema], // Change from stock to sizeStock
   color: {
     type: String,
     required: true,
@@ -70,11 +80,6 @@ const productSchema = new mongoose.Schema({
   material: {
     type: String,
     required: false,
-  },
-  stock: {
-    type: Number,
-    required: true,
-    min: 0,
   },
   createdAt: {
     type: Date,

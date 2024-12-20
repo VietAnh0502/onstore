@@ -54,6 +54,10 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(false);
+
+  const visibleCount = 4; // Number of products visible at once
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -81,70 +85,132 @@ export default function Home() {
   }, []);
 
   const handleNextBanner = () => {
-    setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % collections.length);
+    setFade(true);  // Start fade animation
+    setTimeout(() => {
+      setCurrentBannerIndex((prevIndex) => (prevIndex + 1) % collections.length);
+      setFade(false);  // Reset fade after the image changes
+    }, 180);  // Adjust timeout to match the CSS transition duration
   };
 
   const handlePreviousBanner = () => {
-    setCurrentBannerIndex(
-      (prevIndex) => (prevIndex - 1 + collections.length) % collections.length
+    setFade(true);
+    setTimeout(() => {
+      setCurrentBannerIndex(
+        (prevIndex) => (prevIndex - 1 + collections.length) % collections.length
+      );
+      setFade(false);
+    }, 180);
+  };
+
+  const handleNext = () => {
+    // Move to the next product but keep within bounds
+    setCurrentIndex((prevIndex) => 
+      (prevIndex + 1) % products.length
     );
   };
+
+  const handlePrevious = () => {
+    // Move to the previous product but keep within bounds
+    setCurrentIndex((prevIndex) => 
+      (prevIndex - 1 + products.length) % products.length
+    );
+  };
+  
+  const maxIndex = products.length - visibleCount; // Total number of allowed presses
 
   return (
     <Layout isSearchVisible={isSearchVisible} setSearchVisible={setSearchVisible}>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col px-2 pb-2`}>
         <main className="flex-grow flex flex-col items-center text-center mt-4">
           {collections.length > 0 && (
-            <div className="relative w-full">
-              <Image
-                src={collections[currentBannerIndex].images || "/placeholder.png"}
-                alt={collections[currentBannerIndex].name}
-                layout="responsive"
-                width={1200}
-                height={600}
-                className="w-full"
-              />
-              <h1 className="absolute bottom-10 left-10 text-4xl font-bold text-white">
-                {collections[currentBannerIndex].name}
-              </h1>
-              <p className="absolute bottom-4 left-10 text-lg text-white">
-                {collections[currentBannerIndex].description}
-              </p>
+            <div className="relative w-full ">
+              <div className={`transition-opacity duration-500 ease-in-out ${fade ? 'opacity-0' : 'opacity-100'}`}>
+                <Image
+                  src={collections[currentBannerIndex].images || "/placeholder.png"}
+                  alt={collections[currentBannerIndex].name}
+                  layout="responsive"
+                  width={1450}
+                  height={500}
+                  className="w-full"
+                  style={{ maxHeight: '800px'}}
+                />
+                <h1 className="flex justify-center mt-4 bottom-10 left-10 text-4xl font-bold text-white">
+                  {collections[currentBannerIndex].name}
+                </h1>
+                <p className="flex justify-center bottom-4 left-10 text-lg text-white">
+                  {collections[currentBannerIndex].description}
+                </p>
+                <button
+                  onClick={handlePreviousBanner}
+                  className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-lg"
+                >
+                  ◀
+                </button>
+                <button
+                  onClick={handleNextBanner}
+                  className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-lg"
+                >
+                  ▶
+                </button>
+              </div>
+            </div>
+          )}
+        </main>
+
+         {/* New Arrivals Section */}
+        <section className="flex flex-col items-center">
+          <h3 className="text-xl font-semibold mb-4">New Arrivals</h3>
+          {products.length > 0 && (
+            <div className="relative w-4/5 overflow-hidden">
+              {/* Product Slide Container */}
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentIndex * (80 / visibleCount)}%)`,
+                  width: `${(products.length * 100) / visibleCount}%`,
+                }}
+              >
+                {/* Individual Product Cards */}
+                {products.map((product, index) => (
+                  <div
+                    key={product._id}
+                    className="flex justify-center items-center"
+                    style={{ width: `${100 / visibleCount}%` }}
+                  >
+                    <div className="p-4 box-border">
+                      <Image
+                        src={product.images[0] || "/placeholder.png"}
+                        alt={product.name}
+                        width={300}
+                        height={400}
+                        className="object-cover w-full h-auto"
+                      />
+                      <div className="mt-2 text-center">
+                        <p className="text-sm font-medium">{product.name}</p>
+                        <p className="text-lg font-bold">${product.price}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Navigation Buttons */}
               <button
-                onClick={handlePreviousBanner}
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2"
+                onClick={handlePrevious}
+                disabled={currentIndex === 0}
+                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-lg"
               >
                 ◀
               </button>
               <button
-                onClick={handleNextBanner}
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2"
+                onClick={handleNext}
+                disabled={currentIndex >= maxIndex}
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-lg"
               >
                 ▶
               </button>
             </div>
           )}
-        </main>
-
-        <section className="flex flex-col">
-          <h3 className="text-xl font-semibold">Collections</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-4">
-            {products.map((product) => (
-              <div key={product._id} className="relative group">
-                <Image
-                  src={product.images[0] || "/placeholder.png"}
-                  alt={product.name}
-                  width={1150}
-                  height={1250}
-                  className="object-cover w-full h-full"
-                />
-                <div className="absolute bottom-0 left-0 bg-black bg-opacity-60 text-white p-2 w-full text-left">
-                  <p className="text-sm">{product.name}</p>
-                  <p className="text-lg">${product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </section>
       </div>
     </Layout>
