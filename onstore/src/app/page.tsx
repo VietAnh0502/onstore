@@ -134,10 +134,10 @@ export default function Home() {
                   className="w-full"
                   style={{ maxHeight: '800px'}}
                 />
-                <h1 className="flex justify-center mt-4 bottom-10 left-10 text-4xl font-bold text-white">
+                <h1 className="flex justify-center mt-4 bottom-10 left-10 text-4xl font-bold ">
                   {collections[currentBannerIndex].name}
                 </h1>
-                <p className="flex justify-center bottom-4 left-10 text-lg text-white">
+                <p className="flex justify-center bottom-4 left-10 text-lg">
                   {collections[currentBannerIndex].description}
                 </p>
                 <button
@@ -161,10 +161,10 @@ export default function Home() {
         <section className="flex flex-col items-center">
           <h3 className="text-xl font-semibold mb-4">New Arrivals</h3>
           {products.length > 0 && (
-            <div className="relative w-4/5 overflow-hidden">
+            <div className="relative w-4/5 overflow-hidden ">
               {/* Product Slide Container */}
               <div
-                className="flex transition-transform duration-500 ease-in-out"
+                className="flex transition-transform duration-500 ease-in-out "
                 style={{
                   transform: `translateX(-${currentIndex * (80 / visibleCount)}%)`,
                   width: `${(products.length * 100) / visibleCount}%`,
@@ -174,7 +174,7 @@ export default function Home() {
                 {products.map((product, index) => (
                   <div
                     key={product._id}
-                    className="flex justify-center items-center"
+                    className="flex justify-center items-center "
                     style={{ width: `${100 / visibleCount}%` }}
                   >
                     <div className="p-4 box-border">
@@ -183,7 +183,7 @@ export default function Home() {
                         alt={product.name}
                         width={300}
                         height={400}
-                        className="object-cover w-full h-auto"
+                        className="object-cover w-full h-auto hover:shadow-md"
                       />
                       <div className="mt-2 text-center">
                         <p className="text-sm font-medium">{product.name}</p>

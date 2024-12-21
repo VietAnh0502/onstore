@@ -10,10 +10,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isSearchVisible, setSearchVisible] = useState(false); // Define state for search visibility
 
   return (
-    <div className="flex flex-col min-h-screen pt-4 ">
-      <header className="flex justify-between items-center ml-4 mr-4">
-        <nav className="flex-grow flex items-center justify-center ">
-          <ul className="flex space-x-6 ml-50percentage">
+    <div className="flex flex-col min-h-screen pt-4 w-full ">
+      <header className="flex justify-between items-center shadow-md">
+        <nav className="flex-grow flex items-center justify-center mb-4 ">
+          <ul className="flex space-x-6 ml-50percentage ">
             <li><strong>Homepage</strong></li>
             <li><strong>Shop</strong></li>
             <li><strong>New Arrivals</strong></li>
@@ -22,9 +22,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </ul>
         </nav>
 
-        <nav className="flex items-center ml-4">
+        <nav className="flex items-center ml-4 mr-4 mb-4">
           {/* Search icon */}
-          <div className="flex items-center relative mr-4">
+          <div className="flex items-center relative mr-4 ">
             <button
               onClick={() => setSearchVisible(!isSearchVisible)} // Toggle search box visibility
               className="bg-transparent border-none focus:outline-none"
