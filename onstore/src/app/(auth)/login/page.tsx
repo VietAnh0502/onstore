@@ -1,5 +1,5 @@
 "use client"; 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "../../components/Layout";
 
@@ -20,6 +20,7 @@ export default function LoginPage() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include', // Include cookies in the request
             });
 
             const data = await response.json();
@@ -44,6 +45,15 @@ export default function LoginPage() {
             }
         }
     };
+
+    useEffect(() => {
+        const cookies = document.cookie.split('; ');
+        const refreshToken = cookies.find(cookie => cookie.startsWith('refreshToken='));
+    
+        if (refreshToken) {
+          alert('You are already logged in.');
+        }
+    }, []);
 
     return ( 
         <Layout>
@@ -96,7 +106,7 @@ export default function LoginPage() {
 
                     <div className="mt-6">
                         <h2 className="text-xl font-semibold">NEW CUSTOMER?</h2>
-                        <p>Registering for this site allows you to access your order status and history. We'll get a new account set up for you in no time. For this, we'll only ask you for information necessary to make the purchase process faster and easier.</p>
+                        <p>Registering for this site allows you to access your order status and history. We'll get a new account set up for you in no time.</p>
                         <button 
                             className="mt-4 w-full bg-green-600 text-white p-2 rounded-md hover:bg-green-700"
                         >

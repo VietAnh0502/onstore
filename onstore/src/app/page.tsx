@@ -121,7 +121,7 @@ export default function Home() {
   return (
     <Layout isSearchVisible={isSearchVisible} setSearchVisible={setSearchVisible}>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col px-2 pb-2`}>
-        <main className="flex-grow flex flex-col items-center text-center mt-4">
+        <main className="flex-grow flex flex-col items-center text-center mt-2">
           {collections.length > 0 && (
             <div className="relative w-full ">
               <div className={`transition-opacity duration-500 ease-in-out ${fade ? 'opacity-0' : 'opacity-100'}`}>

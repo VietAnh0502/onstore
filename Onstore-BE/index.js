@@ -3,10 +3,11 @@ const cookieParser = require('cookie-parser');
 const cors = require("cors");
 const connectDB = require('./db/database'); 
 const userRoutes = require('./routes/usersController'); 
-const productRoutes = require('./routes/productController'); 
+const orderRoutes = require('./routes/orderRouters');
+const productRoutes = require('./routes/productRouters'); 
 const reviewRoutes = require('./routes/reviewController');
-const collectionRoutes = require('./routes/collectionController');
-const cartRoutes = require('./routes/cartController');
+const collectionRoutes = require('./routes/collectionRouters');
+const cartRoutes = require('./routes/cartRouters');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -15,7 +16,10 @@ const PORT = process.env.PORT || 3002;
 // Middleware
 app.use(express.json()); // For parsing application/json
 app.use(cookieParser()); // For parsing cookies
-app.use(cors()); // Enable Cross-Origin Resource Sharing, accpting call to api
+app.use(cors({
+  origin: 'http://localhost:3000', // replace with your client URL
+  credentials: true, // Allow cookies to be sent
+}));
 
 // Use user routes
 app.use(userRoutes); 
@@ -23,8 +27,7 @@ app.use(productRoutes);
 app.use(collectionRoutes);
 app.use(cartRoutes); 
 app.use(reviewRoutes);
-
-
+app.use(orderRoutes);
 
 
 async function startServer() {
