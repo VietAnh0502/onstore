@@ -20,7 +20,7 @@ const verifyRefreshToken = async (req, res, next) => {
         }
 
         req.user = user; // Store user information in request
-        //console.log("Succesfully verify v_token and role:" + user.role);
+        console.log("Succesfully verify v_token and role:" + user.role);
         next(); // Move to next middleware or route handler
     } catch (err) {
         //console.error("Token verification failed:", err); // Log any error during verification

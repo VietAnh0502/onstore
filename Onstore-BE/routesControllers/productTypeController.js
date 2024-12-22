@@ -1,9 +1,9 @@
-const express = require('express');
-const router = express.Router();
+// productTypeController.js
+
 const ProductType = require('../Model/productType'); // Adjust the path as necessary
 
 // Create a new product type
-router.post('/api/product-types', async (req, res) => {
+const createProductType = async (req, res) => {
     try {
         const { name, description } = req.body;
         const newProductType = new ProductType({ name, description });
@@ -12,20 +12,20 @@ router.post('/api/product-types', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
 // Get all product types
-router.get('/api/product-types', async (req, res) => {
+const getAllProductTypes = async (req, res) => {
     try {
         const productTypes = await ProductType.find();
         res.status(200).json(productTypes);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
 // Get a product type by ID
-router.get('/api/product-types/:id', async (req, res) => {
+const getProductTypeById = async (req, res) => {
     try {
         const productType = await ProductType.findById(req.params.id);
         if (!productType) {
@@ -35,10 +35,10 @@ router.get('/api/product-types/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
 // Update a product type by ID
-router.put('/api/product-types/:id', async (req, res) => {
+const updateProductType = async (req, res) => {
     try {
         const updatedProductType = await ProductType.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedProductType) {
@@ -48,10 +48,10 @@ router.put('/api/product-types/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
 // Delete a product type by ID
-router.delete('/api/product-types/:id', async (req, res) => {
+const deleteProductType = async (req, res) => {
     try {
         const productType = await ProductType.findByIdAndDelete(req.params.id);
         if (!productType) {
@@ -61,7 +61,13 @@ router.delete('/api/product-types/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-});
+};
 
-// Export the router
-module.exports = router;
+// Export controller functions
+module.exports = {
+    createProductType,
+    getAllProductTypes,
+    getProductTypeById,
+    updateProductType,
+    deleteProductType,
+};

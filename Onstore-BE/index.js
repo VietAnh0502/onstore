@@ -2,10 +2,10 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
 const connectDB = require('./db/database'); 
-const userRoutes = require('./routes/usersController'); 
+const userRoutes = require('./routes/usersRouters'); 
 const orderRoutes = require('./routes/orderRouters');
 const productRoutes = require('./routes/productRouters'); 
-const reviewRoutes = require('./routes/reviewController');
+const reviewRoutes = require('./routes/reviewRouters');
 const collectionRoutes = require('./routes/collectionRouters');
 const cartRoutes = require('./routes/cartRouters');
 

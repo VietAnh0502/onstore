@@ -8,7 +8,7 @@ const validateAccessToken = async (req, res, next) => {
         // then also send req.user for the current user. (by query in the db)
         await verifyRefreshToken(req, res, next);
     } catch (error) {
-        res.status(403).json({ message: 'Forbidden at ArthorizeToken' });
+        res.status(403);
     }
 };
 
