@@ -4,7 +4,7 @@ import Image from "next/image";
 import localFont from "next/font/local";
 import Layout from "./components/Layout";
 
-interface Product {
+export interface Product {
   _id: string;
   name: string;
   description: string;
@@ -119,7 +119,7 @@ export default function Home() {
   const maxIndex = products.length - visibleCount; // Total number of allowed presses
 
   return (
-    <Layout isSearchVisible={isSearchVisible} setSearchVisible={setSearchVisible}>
+    <Layout>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col px-2 pb-2`}>
         <main className="flex-grow flex flex-col items-center text-center mt-4">
           {collections.length > 0 && (

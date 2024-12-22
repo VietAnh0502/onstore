@@ -8,7 +8,28 @@ const validateAccessToken = require('../Middleware/arthorizeToken');
 //protect product controller with roleMiddleware and artorizeTokenMiddleware
 //router.use(validateAccessToken);
 //router.use(arthorizeRole('admin','employee'));
+// Update a product
+router.put('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.status(200).json(product);
+  } catch (error) {
+    console.log('error',error)
+    res.status(500).json({ error: error.message });
+  }
+});
 
+// Get a product by ID
+router.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Create a new product
 router.post('/api/products', async (req, res) => {
@@ -31,27 +52,7 @@ router.get('/api/products', async (req, res) => {
   }
 });
 
-// Get a product by ID
-router.get('/api/products/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Product not found' });
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
-// Update a product
-router.put('/api/products/:id', async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!product) return res.status(404).json({ message: 'Product not found' });
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 // Delete a product
 router.delete('/api/products/:id', async (req, res) => {
@@ -60,6 +61,7 @@ router.delete('/api/products/:id', async (req, res) => {
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.status(204).send(); // No content to send
   } catch (error) {
+    console.log('error',error)
     res.status(500).json({ error: error.message });
   }
 });
