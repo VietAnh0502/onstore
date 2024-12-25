@@ -74,7 +74,6 @@ const userAuthStatus = async (req, res) => {
     const refreshToken = req.cookies.refreshToken; // Access the cookie
     if (refreshToken && req.user) {
       res.status(200).json({ isLoggedIn: true, username: req.user.username });
-      console.log("passing through");
     } else {
       res.status(200).json({ isLoggedIn: false });
     }

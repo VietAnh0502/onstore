@@ -119,7 +119,7 @@ export default function Home() {
   const maxIndex = products.length - visibleCount; // Total number of allowed presses
 
   return (
-    <Layout isSearchVisible={isSearchVisible} setSearchVisible={setSearchVisible}>
+    <Layout>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col px-2 pb-2`}>
         <main className="flex-grow flex flex-col items-center text-center mt-2">
           {collections.length > 0 && (
@@ -166,8 +166,8 @@ export default function Home() {
               <div
                 className="flex transition-transform duration-500 ease-in-out "
                 style={{
-                  transform: `translateX(-${currentIndex * (80 / visibleCount)}%)`,
-                  width: `${(products.length * 100) / visibleCount}%`,
+                  transform: `translateX(-${currentIndex * (100 / visibleCount)}%)`,
+                  width: `products.length`,
                 }}
               >
                 {/* Individual Product Cards */}
@@ -177,13 +177,13 @@ export default function Home() {
                     className="flex justify-center items-center "
                     style={{ width: `${100 / visibleCount}%` }}
                   >
-                    <div className="p-4 box-border">
+                    <div className="p-4 box-border w-80">
                       <Image
                         src={product.images[0] || "/placeholder.png"}
                         alt={product.name}
                         width={300}
                         height={400}
-                        className="object-cover w-full h-auto hover:shadow-md"
+                        className="object-cover w-80 h-auto hover:shadow-md"
                       />
                       <div className="mt-2 text-center">
                         <p className="text-sm font-medium">{product.name}</p>

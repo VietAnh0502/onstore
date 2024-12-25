@@ -31,7 +31,7 @@ const sizeStockSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: true,
-    min: 0, // Minimum stock quantity
+    min: 0, 
   },
 });
 
@@ -55,6 +55,7 @@ const productSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
+    min: 0,
   },
   category: {
     type: String,

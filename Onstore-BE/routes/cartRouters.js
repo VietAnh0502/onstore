@@ -13,7 +13,7 @@ const {
 } = require('../routesControllers/cartController');
 
 // Apply middleware for all cart routes
-router.use(validateAccessToken);
+//router.use(validateAccessToken);
 
 // Define routes
 router.post('/api/carts', createCart); // Create a new cart

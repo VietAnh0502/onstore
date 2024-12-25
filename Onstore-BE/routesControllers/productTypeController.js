@@ -5,8 +5,7 @@ const ProductType = require('../Model/productType'); // Adjust the path as neces
 // Create a new product type
 const createProductType = async (req, res) => {
     try {
-        const { name, description } = req.body;
-        const newProductType = new ProductType({ name, description });
+        const newProductType = new ProductType(req.body);
         await newProductType.save();
         res.status(201).json(newProductType);
     } catch (error) {

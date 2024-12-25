@@ -5,6 +5,7 @@ const connectDB = require('./db/database');
 const userRoutes = require('./routes/usersRouters'); 
 const orderRoutes = require('./routes/orderRouters');
 const productRoutes = require('./routes/productRouters'); 
+const productTypeRouters = require('./routes/productTypeRouters');
 const reviewRoutes = require('./routes/reviewRouters');
 const collectionRoutes = require('./routes/collectionRouters');
 const cartRoutes = require('./routes/cartRouters');
@@ -28,6 +29,8 @@ app.use(collectionRoutes);
 app.use(cartRoutes); 
 app.use(reviewRoutes);
 app.use(orderRoutes);
+app.use(productTypeRouters);
+
 
 
 async function startServer() {
