@@ -1,29 +1,17 @@
-// collectionRoutes.js
-
+// orderRoutes.js
 const express = require('express');
 const router = express.Router();
-const {
-    createCollection,
-    getAllCollections,
-    getCollectionById,
-    updateCollection,
-    deleteCollection,
-    getProductsInCollection,
-} = require('../routesControllers/collectionController');
-const arthorizeRole = require('../Middleware/arthorizeRole');
+const orderController = require('./orderController');
 const validateAccessToken = require('../Middleware/arthorizeToken');
 
-// Protect routes with middleware if necessary
-// router.use(validateAccessToken);
-// router.use(arthorizeRole('admin', 'employee'));
+// Apply middleware for all cart routes
+//router.use(validateAccessToken);
 
 // Define routes
-router.post('/api/collections', createCollection); // Create a new collection
-router.get('/api/collections', getAllCollections); // Get all collections
-router.get('/api/collections/:id', getCollectionById); // Get collection by ID
-router.put('/api/collections/:id', updateCollection); // Update a collection
-router.delete('/api/collections/:id', deleteCollection); // Delete a collection
-router.get('/api/collections/:id/products', getProductsInCollection); // Get products in a collection
+router.post('/api/orders', orderController.createOrder);
+router.get('/api/orders/currentUser', orderController.getCurrentUserOrder);
+router.get('/api/orders', orderController.getAllUserOrders);
+router.put('/api/orders/:orderId', orderController.updateOrderStatus);
+router.delete('/api/orders/:orderId', orderController.deleteOrder);
 
-// Export the collection routes
 module.exports = router;

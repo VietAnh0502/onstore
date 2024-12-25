@@ -1,78 +1,89 @@
-// collectionController.js
+// orderController.js
+const Order = require('../Model/order');
+const Cart = require('../Model/cart');
 
-const Collection = require('../Model/collection');
-
-// Create a new collection
-const createCollection = async (req, res) => {
+// Create a new order
+exports.createOrder = async (req, res) => {
     try {
-        const newCollection = new Collection(req.body);
-        await newCollection.save();
-        res.status(201).json(newCollection);
+        const userId = req.user.id; // Get user ID from the verified token
+        const cart = await Cart.findOne({ user: userId });
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found for this user' });
+        }
+
+        const newOrder = new Order({
+            user: userId,
+            items: cart.items.map(item => ({
+                product: item.product,
+                quantity: item.quantity,
+                price: item.price,
+            })),
+            total: cart.total,
+        });
+
+        await newOrder.save();
+
+        // Optionally, after successful order placement, clear the cart
+        await Cart.findByIdAndDelete(cart._id); // clear the cart after creating an order
+
+        res.status(201).json(newOrder);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Get all collections
-const getAllCollections = async (req, res) => {
+// Get order details
+exports.getCurrentUserOrder = async (req, res) => {
     try {
-        const collections = await Collection.find();
-        res.status(200).json(collections);
+        const userId = req.user.id; // Get user ID from the verified token
+        const order = await Order.findOne({ user: userId }).populate('items.product');
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found for this user' });
+        }
+        res.status(200).json(order);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Get a collection by ID
-const getCollectionById = async (req, res) => {
+// Get all orders for a user
+exports.getAllUserOrders = async (req, res) => {
     try {
-        const collection = await Collection.findById(req.params.id);
-        if (!collection) return res.status(404).json({ message: 'Collection not found' });
-        res.status(200).json(collection);
+        const orders = await Order.find({ user: req.user.id }).populate('items.product');
+        res.status(200).json(orders);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Update a collection
-const updateCollection = async (req, res) => {
+// Update the order status
+exports.updateOrderStatus = async (req, res) => {
+    const { status } = req.body; // Expecting the new status in the request body
     try {
-        const updatedCollection = await Collection.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updatedCollection) return res.status(404).json({ message: 'Collection not found' });
-        res.status(200).json(updatedCollection);
+        const order = await Order.findById(req.params.orderId);
+        if (!order || order.user.toString() !== req.user.id) {
+            return res.status(404).json({ message: 'Order not found or does not belong to the user' });
+        }
+
+        order.status = status; // Update status
+        await order.save();
+        res.status(200).json(order);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-// Delete a collection
-const deleteCollection = async (req, res) => {
+// Delete an order (if needed)
+exports.deleteOrder = async (req, res) => {
     try {
-        const collection = await Collection.findByIdAndDelete(req.params.id);
-        if (!collection) return res.status(404).json({ message: 'Collection not found' });
+        const order = await Order.findById(req.params.orderId);
+        if (!order || order.user.toString() !== req.user.id) {
+            return res.status(404).json({ message: 'Order not found or does not belong to the user' });
+        }
+
+        await Order.findByIdAndDelete(req.params.orderId);
         res.status(204).send(); // No content to send
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
-
-// Get all products in a collection by collection ID
-const getProductsInCollection = async (req, res) => {
-    try {
-        const collection = await Collection.findById(req.params.id).populate('products'); 
-        if (!collection) return res.status(404).json({ message: 'Collection not found' });
-        res.status(200).json(collection.products); // Return products associated with the collection
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Export controller functions
-module.exports = {
-    createCollection,
-    getAllCollections,
-    getCollectionById,
-    updateCollection,
-    deleteCollection,
-    getProductsInCollection,
 };
