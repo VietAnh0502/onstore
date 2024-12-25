@@ -1,9 +1,7 @@
 "use client";
-import {
-  handleDeleteProductAction,
-} from "@/utils/actions";
+import { handleDeleteProductAction } from "@/utils/actions";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
-import { Button, Image, Popconfirm, Table, Tag } from "antd"; 
+import { Button, Image, Popconfirm, Table, Tag } from "antd";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import UserCreate from "./product.create";
@@ -38,11 +36,13 @@ const ProductTable = (props: any) => {
       title: "Size Stock",
       // Render size stock information from the sizeStock array
       render: (text: any, record: any) => {
-        return record.sizeStock.map((item: { size: string; quantity: number }) => (
-          <Tag key={item.size}>
-            {item.size}: {item.quantity}
-          </Tag>
-        ));
+        return record.sizeStock.map(
+          (item: { size: string; quantity: number }) => (
+            <Tag key={item.size}>
+              {item.size}: {item.quantity}
+            </Tag>
+          )
+        );
       },
     },
     {
@@ -120,7 +120,9 @@ const ProductTable = (props: any) => {
         }}
       >
         <span>Manager Product</span>
-        <Button onClick={() => setIsCreateModalOpen(true)}>Create Product</Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>
+          Create Product
+        </Button>
       </div>
       <Table
         bordered
