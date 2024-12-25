@@ -1,6 +1,4 @@
-import {
-  handleUpdateProductAction,
-} from "@/utils/actions";
+import { handleUpdateProductAction } from "@/utils/actions";
 import {
   Modal,
   Input,
@@ -33,6 +31,7 @@ const UserUpdate = (props: IProps) => {
 
   const [form] = Form.useForm();
   const [listColl, setlistColl] = useState([]);
+  const [listType, setlistType] = useState([]);
   const [sizeStocks, setSizeStocks] = useState<SizeStock[]>([]);
 
   useEffect(() => {
@@ -44,6 +43,7 @@ const UserUpdate = (props: IProps) => {
         color: dataUpdate.color,
         brand: dataUpdate.brand,
         images: dataUpdate.images,
+        type: dataUpdate.type,
         price: dataUpdate.price,
         description: dataUpdate.description,
       });
@@ -63,7 +63,7 @@ const UserUpdate = (props: IProps) => {
       const res = await handleUpdateProductAction({
         ...values,
         sizeStock: sizeStocks, // Include the sizeStock
-        id: dataUpdate._id
+        id: dataUpdate._id,
       });
       if (res) {
         handleCloseUpdateModal();
@@ -77,22 +77,39 @@ const UserUpdate = (props: IProps) => {
     }
   };
 
-  const handleGetColl = async() => {
+  const handleGetColl = async () => {
     const respon = await fetch(`http://localhost:3002/api/collections`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    
+
     if (!respon.ok) {
-        const error = await respon.json();
-        throw new Error(`Failed to create product: ${error.message}`);
+      const error = await respon.json();
+      throw new Error(`Failed to create product: ${error.message}`);
     }
-      
+
     const res = await respon.json();
     return res;
-  }
+  };
+
+  const handleGetType = async () => {
+    const respon = await fetch(`http://localhost:3002/api/product-types`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!respon.ok) {
+      const error = await respon.json();
+      throw new Error(`Failed to create product: ${error.message}`);
+    }
+
+    const res = await respon.json();
+    return res;
+  };
 
   const listAColl = async () => {
     let res = await handleGetColl();
@@ -102,27 +119,40 @@ const UserUpdate = (props: IProps) => {
     setlistColl(a);
   };
 
-  const handleAddSizeStock = () => {
-    setSizeStocks([...sizeStocks, { size: '', quantity: 0 }]); // Add a new size stock entry
+  const listAType = async () => {
+    let res = await handleGetType();
+    let a = res?.map((item: any) => {
+      return { value: item?._id, label: item?.name };
+    });
+    setlistType(a);
   };
 
-  const handleSizeStockChange = (index: number, field: 'size' | 'quantity', value: string | number) => {
+  const handleAddSizeStock = () => {
+    setSizeStocks([...sizeStocks, { size: "", quantity: 0 }]); // Add a new size stock entry
+  };
+
+  const handleSizeStockChange = (
+    index: number,
+    field: "size" | "quantity",
+    value: string | number
+  ) => {
     const newSizeStocks = [...sizeStocks];
-    
+
     // Assert types to ensure that the assignment is safe
-    if (field === 'size') {
-        // When field is 'size', value should be a string
-        newSizeStocks[index].size = value as string; // Type assertion to indicate it's a string
-    } else if (field === 'quantity') {
-        // When field is 'quantity', value should be a number
-        newSizeStocks[index].quantity = value as number; // Type assertion to indicate it's a number
+    if (field === "size") {
+      // When field is 'size', value should be a string
+      newSizeStocks[index].size = value as string; // Type assertion to indicate it's a string
+    } else if (field === "quantity") {
+      // When field is 'quantity', value should be a number
+      newSizeStocks[index].quantity = value as number; // Type assertion to indicate it's a number
     }
 
-    setSizeStocks(newSizeStocks);  
+    setSizeStocks(newSizeStocks);
   };
 
   useEffect(() => {
     listAColl();
+    listAType();
   }, []);
 
   return (
@@ -149,9 +179,16 @@ const UserUpdate = (props: IProps) => {
             <Form.Item
               label="Category"
               name="category"
-              rules={[{ required: true, message: "Please input your category!" }]}
+              rules={[
+                { required: true, message: "Please input your category!" },
+              ]}
             >
-              <Select options={['Women'].map((size) => ({ value: size, label: size }))} />
+              <Select
+                options={["Women"].map((size) => ({
+                  value: size,
+                  label: size,
+                }))}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -160,7 +197,9 @@ const UserUpdate = (props: IProps) => {
             <Form.Item
               label="Collection"
               name="coll"
-              rules={[{ required: true, message: "Please select a collection!" }]}
+              rules={[
+                { required: true, message: "Please select a collection!" },
+              ]}
             >
               <Select options={listColl} />
             </Form.Item>
@@ -172,6 +211,15 @@ const UserUpdate = (props: IProps) => {
               rules={[{ required: true, message: "Please input your color!" }]}
             >
               <Input />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Type"
+              name="type"
+              rules={[{ required: true, message: "Please select a type!" }]}
+            >
+              <Select options={listType} />
             </Form.Item>
           </Col>
         </Row>
@@ -200,11 +248,14 @@ const UserUpdate = (props: IProps) => {
             <Form.Item
               label="Price"
               name="price"
-              rules={[{ required: true, message: "Please input your price!" }, {
-                type: 'number',
-                min: 1,
-                message: 'Number must be > 1!',
-              }]}
+              rules={[
+                { required: true, message: "Please input your price!" },
+                {
+                  type: "number",
+                  min: 1,
+                  message: "Number must be > 1!",
+                },
+              ]}
             >
               <InputNumber />
             </Form.Item>
@@ -213,7 +264,9 @@ const UserUpdate = (props: IProps) => {
             <Form.Item
               label="Description"
               name="description"
-              rules={[{ required: true, message: "Please input your description!" }]}
+              rules={[
+                { required: true, message: "Please input your description!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -229,8 +282,13 @@ const UserUpdate = (props: IProps) => {
                   <Select
                     placeholder="Select Size"
                     value={sizeStock.size}
-                    onChange={(value) => handleSizeStockChange(index, 'size', value)}
-                    options={['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) => ({ value: size, label: size }))}
+                    onChange={(value) =>
+                      handleSizeStockChange(index, "size", value)
+                    }
+                    options={["XS", "S", "M", "L", "XL", "XXL"].map((size) => ({
+                      value: size,
+                      label: size,
+                    }))}
                   />
                 </Col>
                 <Col span={10}>
@@ -238,7 +296,13 @@ const UserUpdate = (props: IProps) => {
                     type="number"
                     placeholder="Quantity"
                     value={sizeStock.quantity}
-                    onChange={(e) => handleSizeStockChange(index, 'quantity', Number(e.target.value))}
+                    onChange={(e) =>
+                      handleSizeStockChange(
+                        index,
+                        "quantity",
+                        Number(e.target.value)
+                      )
+                    }
                   />
                 </Col>
               </Row>
