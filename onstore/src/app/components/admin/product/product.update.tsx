@@ -11,6 +11,7 @@ import {
   Button,
   InputNumber,
 } from "antd";
+import { DeleteOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 
 interface IProps {
@@ -147,6 +148,11 @@ const UserUpdate = (props: IProps) => {
       newSizeStocks[index].quantity = value as number; // Type assertion to indicate it's a number
     }
 
+    setSizeStocks(newSizeStocks);
+  };
+
+  const handleRemoveSizeStock = (index: number) => {
+    const newSizeStocks = sizeStocks.filter((_, i) => i !== index);
     setSizeStocks(newSizeStocks);
   };
 

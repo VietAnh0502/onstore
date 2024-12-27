@@ -32,9 +32,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             setUserLoggedIn(true);
             setUsername(data.username);
             setShowUserModal(true);
-          } else {
-            setUserLoggedIn(false);
-            window.location.href = '/login';
+          } else if (data.isGuested) {
+            return;
           }
       } catch (error) {
         setUserLoggedIn(false);

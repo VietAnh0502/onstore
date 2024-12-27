@@ -224,7 +224,13 @@ const ProductCreate = (props: IProps) => {
             <Form.Item
               label="Image"
               name="images"
-              rules={[{ required: true, message: "Please input your image!" }]}
+              rules={[
+                { required: false, message: "Please input your image!" },
+                {
+                  type: 'url',
+                  message: 'Please enter a valid URL',
+                },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -239,8 +245,8 @@ const ProductCreate = (props: IProps) => {
                 { required: true, message: "Please input your price!" },
                 {
                   type: "number",
-                  min: 1,
-                  message: "Number must be > 1!",
+                  min: 0,
+                  message: "Number must be > 0!",
                 },
               ]}
             >

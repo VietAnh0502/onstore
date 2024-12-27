@@ -10,6 +10,7 @@ const {
     addReviewToProduct,
     getProductReviews,
     updateSizeStock,
+    getProductsByProductType,
 } = require('../routesControllers/productController');
 const arthorizeRole = require('../Middleware/arthorizeRole');
 const validateAccessToken = require('../Middleware/arthorizeToken');
@@ -27,6 +28,7 @@ router.delete('/api/products/:id', deleteProduct); // Delete a product
 router.post('/api/products/:id/reviews', addReviewToProduct); // Add a review to a product
 router.get('/api/products/:id/reviews', getProductReviews); // Get all reviews of a product
 router.put('/api/products/:id/sizeStock', updateSizeStock); // Add or update size stock
+router.get('/api/product/:productType/products', getProductsByProductType); // Get all products of a product type
 
 // Export the product routes
 module.exports = router;

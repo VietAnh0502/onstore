@@ -16,12 +16,13 @@ const {
 const verifyAccessToken = require('../Middleware/verifyAuthAccess.js');
 const verifyRefreshToken = require('../Middleware/verifyRefresh.js');
 const validateAccessToken = require('../Middleware/arthorizeToken');
+const guestUserAuth = require('../Middleware/guestUserAuth');
 const arthorizeRole = require('../Middleware/arthorizeRole.js');
 
 // Define routes
 router.post('/users/registration', registerUser); // Register a new user
 router.post('/api/users/login', loginUser); // User login
-router.get('/api/users/authStatus',validateAccessToken, userAuthStatus); // Check for http-only tokens
+router.get('/api/users/authStatus',guestUserAuth, validateAccessToken, userAuthStatus); // Check for http-only tokens
 router.post('/api/users/refresh', verifyRefreshToken, refreshAccessToken); // Refresh access token
 router.post('/api/users/logout', validateAccessToken ,logoutUser); // Logout user
 router.get('/api/users', validateAccessToken, arthorizeRole('admin'), getAllUsers); // Get all users

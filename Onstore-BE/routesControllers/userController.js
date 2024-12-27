@@ -72,12 +72,18 @@ const loginUser = async (req, res) => {
 
 
 const userAuthStatus = async (req, res) => {
-    const refreshToken = req.cookies.refreshToken; // Access the cookie
-    if (refreshToken && req.user) {
-      res.status(200).json({ isLoggedIn: true, username: req.user.username });
-      console.log("passing through");
-    } else {
-      res.status(200).json({ isLoggedIn: false });
+    try {
+        const refreshToken = req.cookies.refreshToken; // Access the cookie
+        if (refreshToken && req.user) {
+          res.status(200).json({ isLoggedIn: true, isGuested: false, username: req.user.username });
+          console.log("passing through");
+        } else if(req.guestId) {
+            res.status(200).json({ isLoggedIn: false, isGuested: true});
+        } else {
+          res.status(200).json({ isLoggedIn: false });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message});
     }
 };
 
@@ -106,7 +112,8 @@ const logoutUser = async (req, res) => {
         // Remove the refresh token from the user's refreshTokens array
         user.refreshTokens = user.refreshTokens.filter(token => token !== refreshToken);
         await user.save(); // Save the updated user document
-
+        res.clearCookie('refreshToken');
+        res.clearCookie('guestId');
         res.status(200).json({ message: 'Successfully logged out' });
     } catch (error) {
         res.status(500).json({ error: error.message });
