@@ -6,8 +6,10 @@ const JWT_SECRET_REFRESH = process.env.REFRESH_TOKEN_SECRET;
 const verifyRefreshToken = async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken; // Get refresh token from cookies
 
+
     if (!refreshToken) {
-        return res.sendStatus(401); // Unauthorized if no refresh token is provided
+        //return res.sendStatus(401); // Unauthorized if no refresh token is provided
+        next();
     }
 
     try {
@@ -24,7 +26,7 @@ const verifyRefreshToken = async (req, res, next) => {
         next(); // Move to next middleware or route handler
     } catch (err) {
         //console.error("Token verification failed:", err); // Log any error during verification
-        return res.sendStatus(403).json({ message: 'Forbidden at verifyRefresh' }); // Forbidden if the token is invalid
+        return res.sendStatus(403); // Forbidden if the token is invalid
     }
 };
 

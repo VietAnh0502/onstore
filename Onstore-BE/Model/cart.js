@@ -18,10 +18,14 @@ const cartItemSchema = new mongoose.Schema({
 const cartSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId, // Reference to the User model
-    required: true,
     ref: 'user',
+    default: null, // Default to null for guest
   },
-  items: [cartItemSchema], // Array of cart items
+  guestID: {
+    type: String,
+    default: null, // Guest id for cart identification
+  },
+  items: [cartItemSchema],
   total: {
     type: Number,
     default: 0, // Default total amount

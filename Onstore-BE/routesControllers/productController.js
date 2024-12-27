@@ -110,6 +110,16 @@ const updateSizeStock = async (req, res) => {
     }
 };
 
+const getProductsByProductType = async (req, res) => {
+    try {
+        const { productType } = req.params;
+        const products = await Product.find({ type: productType }).populate('type');
+        res.status(200).json(products);
+    } catch (error) {
+       res.status(500).json({ error: error.message });
+   }
+};
+
 // Export controller functions
 module.exports = {
     createProduct,
@@ -120,4 +130,5 @@ module.exports = {
     addReviewToProduct,
     getProductReviews,
     updateSizeStock,
+    getProductsByProductType,
 };

@@ -1,7 +1,7 @@
 // orderRoutes.js
 const express = require('express');
 const router = express.Router();
-const orderController = require('./orderController');
+const orderController = require('../routesControllers/orderController');
 const validateAccessToken = require('../Middleware/arthorizeToken');
 
 // Apply middleware for all cart routes
