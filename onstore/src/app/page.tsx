@@ -3,6 +3,26 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import localFont from "next/font/local";
 import Layout from "./components/Layout";
+import ProductDetail from './components/ProductDetail';
+const product = {
+  id: '1',
+  name: 'Product Name',
+  price: 100,
+  originalPrice: 150,
+  discount: 30,
+  color: 'L-GREEN',
+  images: ['image1.jpg', 'image2.jpg'],
+  details: {
+    shirt: 'Cotton shirt',
+    dupatta: 'Silk dupatta',
+    trouser: 'Cotton trouser',
+  },
+};
+
+const Page = () => {
+  return <ProductDetail product={product} />;
+};
+
 
 interface Product {
   _id: string;

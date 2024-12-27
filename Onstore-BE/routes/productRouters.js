@@ -1,6 +1,34 @@
 // productRoutes.js
 const express = require('express');
 const router = express.Router();
+// Mock data cho sản phẩm
+const productDetail = {
+    id: "1a",
+    name: "PASSION - 3 PC",
+    price: 26,
+    originalPrice: 32,
+    discount: 20,
+    color: "L-GREEN",
+    productCode: "1W24P3P173-L-GREEN",
+    sku: "210000-4707160",
+    status: "In Stock",
+    images: [
+      "/images/product1-main.jpg",
+      "/images/product1-1.jpg",
+      "/images/product1-2.jpg",
+      "/images/product1-3.jpg"
+    ],
+    details: {
+      type: "Unstitched 3-Piece Suit",
+      shirt: "Digital Printed Heavy Weight Khaddar 1.75M",
+      dupatta: "Digital Printed Heavy Weight Khaddar 2.5M",
+      trouser: "Dyed Heavy Weight Khaddar Trouser 1.8M"
+    }
+  };
+  
+  router.get('/product/:id', (req, res) => {
+    res.json(productDetail);
+  });
 const {
     createProduct,
     getAllProducts,

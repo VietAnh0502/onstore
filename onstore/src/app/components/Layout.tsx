@@ -97,7 +97,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               >
                 <strong>Shop</strong>
                 {/* Updated Dropdown Menu */}
-                <div className="absolute transform -translate-x-1/3 hover-to-show bg-white shadow-inner w-auto transition-all rounded-md z-10 group-hover:flex p-2" style={{}}>
+                <div className="absolute transform -translate-x-1/3 hover-to-show bg-black shadow-inner w-auto transition-all rounded-md z-10 group-hover:flex p-2 mt-[17.5px]" style={{}}>
                   <div className="flex space-x-4">
                     {productTypes.map((type) => (
                       <div key={type._id} className="flex flex-col items-center p-2 w-40">
