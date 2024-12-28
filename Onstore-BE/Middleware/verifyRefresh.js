@@ -25,8 +25,8 @@ const verifyRefreshToken = async (req, res, next) => {
         console.log("Succesfully verify v_token and role:" + user.role);
         next(); // Move to next middleware or route handler
     } catch (err) {
-        //console.error("Token verification failed:", err); // Log any error during verification
-        return res.sendStatus(403); // Forbidden if the token is invalid
+        console.error("Token verification failed:", err); // Log any error during verification
+        //return res.sendStatus(403); // Forbidden if the token is invalid
     }
 };
 

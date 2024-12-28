@@ -27,20 +27,20 @@ const addItemToCart = async (req, res) => {
         const { productId, quantity } = req.body;
         let cart;
 
-        if (req.user){
+        if (req.user) {
             cart = await Cart.findOne({ user: req.user.id });
             if (!cart) {
-                // Create a new cart if one doesn't exist
                 cart = new Cart({ user: req.user.id });
             }
-        } else if(req.guestId){
+        } else if (req.guestId) {
             cart = await Cart.findOne({ guestID: req.guestId });
-           if (!cart) {
-                // Create a new cart if one doesn't exist
+            if (!cart) {
                 cart = new Cart({ guestID: req.guestId });
             }
         }
 
+        if (!cart) return res.status(404).json({ message: 'Cart could not be created or found.' });
+        
         if (!cart.items) {
             cart.items = [];
         }
@@ -48,23 +48,23 @@ const addItemToCart = async (req, res) => {
         const existingItem = cart.items.find(item => item.product.toString() === productId);
         
         if (existingItem) {
-            // Update quantity if item already exists
             existingItem.quantity += quantity;
         } else {
-            // Add new item to the cart
             cart.items.push({ product: productId, quantity });
         }
 
-        // Calculate total
         const product = await Product.findById(productId);
-        if(product){
+        if (product) {
             cart.total += product.price * quantity;
         }
 
         await cart.save();
-        res.status(200).json(cart);
+        res.status(200).json(cart); // Ensure only one res is sent
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error adding item to cart:', error); // added for debugging
+        if (!res.headersSent) { // to ensure headers are not sent before
+            res.status(500).json({ error: error.message });
+        }
     }
 };
 

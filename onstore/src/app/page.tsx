@@ -177,13 +177,13 @@ export default function Home() {
                     className="flex justify-center items-center "
                     style={{ width: `${100 / visibleCount}%` }}
                   >
-                    <div className="p-4 box-border w-80">
+                    <div className="p-4 box-border w-80 image-container">
                       <Image
                         src={product.images[0] || "/placeholder.png"}
                         alt={product.name}
                         width={300}
                         height={400}
-                        className="object-cover w-80 h-auto hover:shadow-md"
+                        className="image"
                       />
                       <div className="mt-2 text-center">
                         <p className="text-sm font-medium">{product.name}</p>

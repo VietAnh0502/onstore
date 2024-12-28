@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import ProductDetail from '@/app/components/ProductDetail';
+import ProductDetail from '@/app/components/product/ProductDetail';
 import { useParams } from 'next/navigation';
 
 export default function ProductPage() {

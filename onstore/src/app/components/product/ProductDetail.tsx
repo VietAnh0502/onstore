@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaHeart, FaShareAlt } from 'react-icons/fa';
-import Layout from './Layout'; // Import Layout
+import Layout from '@/app/components/Layout'; // Import Layout
 
 // Định nghĩa kiểu cho ProductDetailProps
 interface ProductDetailProps {

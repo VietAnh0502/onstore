@@ -12,6 +12,10 @@ const cartItemSchema = new mongoose.Schema({
     required: true,
     min: 1, // Minimum quantity of 1
   },
+  size: {
+    type: String,
+    require: false,
+  }
 });
 
 // Define the Cart schema for a user
