@@ -46,6 +46,7 @@ const ProductsTypePage = () => {
   useEffect(() => {
       const fetchProducts = async () => {
           if (!productTypeId) return;
+          console.log(productTypeId);
           const response = await fetch(
               `http://localhost:3002/api/product/${productTypeId}/products`
           );
@@ -98,7 +99,7 @@ const ProductsTypePage = () => {
           <div style={{ flex: 1, overflowY: "auto", padding: "10px" }}>
             <Row gutter={[16, 16]}>
                             {products.map((product) => (
-                <Col span={6} key={product._id}> {/* Changed span from 8 to 6 for 4 columns */}
+                <Col span={6} key={product._id}> 
                   <Card
                     hoverable
                     cover={<img alt={product.name} src={product.images[0]} />}
