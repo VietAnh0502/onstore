@@ -24,7 +24,7 @@ app.use(cors({
 
 // Use user routes
 app.use(userRoutes); 
-app.use('/api', productRoutes);
+app.use(productRoutes);
 app.use(collectionRoutes);
 app.use(cartRoutes); 
 app.use(reviewRoutes);
