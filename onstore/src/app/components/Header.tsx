@@ -1,4 +1,3 @@
-// Header.tsx
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -46,38 +45,33 @@ const Header: React.FC<HeaderProps> = ({
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
-      };
+    };
 
-
-      const ProductTypeLinks = () => (
+    const ProductTypeLinks = () => (
         <div className="absolute transform -translate-x-1/3 translate-y-5 group-hover:translate-y-0 hover-to-show bg-[var(--background)] shadow-inner w-auto transition-all duration-300 rounded-md z-10 group-hover:flex p-2" style={{ marginTop: "17px" }}>
-          <div className="flex space-x-4">
-            {productTypes.map(type => (
-              <div key={type._id} className="flex flex-col items-center p-2 w-40">
-                <Link href={`/producttypes/${type._id}`} className="flex flex-col items-center">
-                  {/* Thêm hiệu ứng zoom vào div chứa ảnh */}
-                  <div className="relative overflow-hidden w-32 h-32 mb-2 transform transition-transform duration-300 hover:scale-110">
-                    <img
-                      src={type.image}
-                      alt={type.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  {/* Chữ có hiệu ứng chuyển màu khi hover */}
-                  <span className="text-center transition-all duration-300 hover:text-blue-500">
-                    {type.name}
-                  </span>
-                </Link>
-              </div>
-            ))}
-          </div>
+            <div className="flex space-x-4">
+                {productTypes.map(type => (
+                    <div key={type._id} className="flex flex-col items-center p-2 w-40">
+                        <Link href={`/producttypes/${type._id}`} className="flex flex-col items-center">
+                            <div className="relative overflow-hidden w-32 h-32 mb-2 transform transition-transform duration-300 hover:scale-110">
+                                <img
+                                    src={type.image}
+                                    alt={type.name}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <span className="text-center transition-all duration-300 hover:text-blue-500">
+                                {type.name}
+                            </span>
+                        </Link>
+                    </div>
+                ))}
+            </div>
         </div>
-      );
-      
-
+    );
 
     return (
-<header className="fixed top-0 left-0 right-0 flex justify-between items-center shadow-md p-2 bg-[var(--background)] z-50 pt-4 pb-4" style={{ fontWeight: "lighter" }}>
+<header className="fixed top-0 w-full flex justify-between items-center shadow-md p-2 bg-[var(--background)] z-50 pt-4 pb-4" style={{ fontWeight: "lighter" }}>
 <button onClick={toggleMenu} className="md:hidden focus:outline-none" aria-label="Toggle menu">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -85,23 +79,21 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             <nav className={`flex-grow items-center justify-center md:flex ${isMenuOpen ? 'hidden' : 'hidden md:flex'}`}>
-            <ul className="flex space-x-6">
-    <MenuItemH href="/">Homepage</MenuItemH>
-    <li className="relative group transition-all hover-to-show-link" onMouseEnter={fetchProductTypes}>
-    <a 
-        href="#" 
-        className="cursor-pointer hover:text-blue-300 active:text-blue-500 transition-all duration-300">
-        <strong>Shop</strong>
-        <span className="absolute bottom-0 left-0 w-0 h-px bg-blue-300 transition-all group-hover:w-full active:w-full"></span>
-    </a>
-    <ProductTypeLinks />
-</li>
-
-    <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
-    <MenuItemH href="/contact">Contact</MenuItemH>
-    <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
-</ul>
-
+                <ul className="flex space-x-6">
+                    <MenuItemH href="/">Homepage</MenuItemH>
+                    <li className="relative group transition-all hover-to-show-link" onMouseEnter={fetchProductTypes}>
+                        <a
+                            href="#"
+                            className="cursor-pointer hover:text-blue-300 active:text-blue-500 transition-all duration-300">
+                            <strong>Shop</strong>
+                            <span className="absolute bottom-0 left-0 w-0 h-px bg-blue-300 transition-all group-hover:w-full active:w-full"></span>
+                        </a>
+                        <ProductTypeLinks />
+                    </li>
+                    <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
+                    <MenuItemH href="/contact">Contact</MenuItemH>
+                    <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
+                </ul>
             </nav>
 
             <div className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 md:hidden ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -112,41 +104,49 @@ const Header: React.FC<HeaderProps> = ({
                         </svg>
                     </button>
                     <ul className="flex flex-col space-y-4">
-                    <MenuItemH href="/">Homepage</MenuItemH>
-                    <li className="relative group transition-all hover-to-show-link" onMouseEnter={fetchProductTypes}>
-    <a 
-        href="#" 
-        className="cursor-pointer hover:text-blue-300 active:text-blue-500 transition-all duration-300">
-        <strong>Shop</strong>
-        <span className="absolute bottom-0 left-0 w-0 h-px bg-blue-300 transition-all group-hover:w-full active:w-full"></span>
-    </a>
-    <ProductTypeLinks />
-</li>
-
-    <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
-    <MenuItemH href="/contact">Contact</MenuItemH>
-    <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
+                        <MenuItemH href="/">Homepage</MenuItemH>
+                        <li className="relative group transition-all hover-to-show-link" onMouseEnter={fetchProductTypes}>
+                            <a
+                                href="#"
+                                className="cursor-pointer hover:text-blue-300 active:text-blue-500 transition-all duration-300">
+                                <strong>Shop</strong>
+                                <span className="absolute bottom-0 left-0 w-0 h-px bg-blue-300 transition-all group-hover:w-full active:w-full"></span>
+                            </a>
+                            <ProductTypeLinks />
+                        </li>
+                        <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
+                        <MenuItemH href="/contact">Contact</MenuItemH>
+                        <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
                     </ul>
                 </div>
             </div>
 
             <nav className="flex items-center mr-2">
                 <div className="flex items-center relative mr-4">
-                    <button onClick={() => setSearchVisible(!isSearchVisible)} className="bg-transparent border-none focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                    </button>
+                    {/* Hiển thị trường tìm kiếm với hiệu ứng */}
+<div className={`transition-all duration-500 ease-in-out ${isSearchVisible ? 'w-64' : 'w-0'} overflow-hidden`}>
+    <input
+        type="text"
+        placeholder="Search..."
+        className=" border-gray-300 rounded px-2 py-1 w-full text-black dark:text-white dark:bg-transparent focus:outline-none focus:ring-0"
+        autoFocus
+    />
+</div>
+{/* Thêm hiệu ứng cho trường tìm kiếm */}
+<button onClick={() => setSearchVisible(!isSearchVisible)} className="bg-transparent border-none focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+</button>
+
+
+                    
                 </div>
 
                 <div className="relative cursor-pointer mr-4">
-                        {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                        </svg> */}
                     <div onClick={toggleDrawer(true)}>
                         <ShoppingCartOutlinedIcon></ShoppingCartOutlinedIcon>
                     </div>
-
                     <span className="absolute top-[-10px] right-[-10px] bg-yellow-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">1</span>
                 </div>
 
@@ -161,15 +161,10 @@ const Header: React.FC<HeaderProps> = ({
                 <UserModal username={username} handleLogout={handleLogout} toggleUserModal={toggleUserModal} />
             )}
 
-            {isSearchVisible && (
-                <SearchModal setSearchVisible={setSearchVisible} />
-            )}
-
             <MainDrawerList
                 toggleDrawer={toggleDrawer}
                 open={open}
             ></MainDrawerList>
-            
         </header>
     );
 };
@@ -198,16 +193,6 @@ const UserModal: React.FC<{ username: string; handleLogout: () => void; toggleUs
                 <button onClick={toggleUserModal} className="flex-grow py-2 rounded border border-gray-400 text-gray-600 hover:bg-gray-100">Close</button>
                 <button onClick={handleLogout} className="flex-grow py-2 rounded border border-gray-400 bg-red-500 text-white hover:bg-red-600">Logout</button>
             </div>
-        </div>
-    </div>
-);
-
-const SearchModal: React.FC<{ setSearchVisible: (visible: boolean) => void; }> = ({ setSearchVisible }) => (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded shadow-md">
-            <h2 className="text-lg font-bold mb-4">Search</h2>
-            <input type="text" placeholder="Search..." className="border border-gray-300 rounded px-2 py-1 w-full" />
-            <button onClick={() => setSearchVisible(false)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
         </div>
     </div>
 );
