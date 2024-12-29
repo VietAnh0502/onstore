@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaShareAlt } from "react-icons/fa";
 import Layout from "./Layout"; // Import Layout
+import { useDispatch } from "react-redux";
+import { doAddCartAction } from "@/redux/order/orderSlice";
 
 // Định nghĩa kiểu cho ProductDetailProps
 interface ProductDetailProps {
@@ -449,9 +451,20 @@ const RelatedProducts = () => {
 };
 
 const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+  const [selectedImage, setSelectedImage] = useState(product?.images?.[0]);
   const [quantity, setQuantity] = useState(1);
   const [showDetails, setShowDetails] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const handleAddCart = () => {
+    // let data = {
+    //   userId: session.user._id,
+    //   detail: [{ product: product._id, quantity: 1 }],
+    //   totalPrice: product.price,
+    // };
+    dispatch(doAddCartAction({ quantity: quantity, detail: product, _id: product.id }));
+  };
 
   return (
     <Layout>
@@ -461,7 +474,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
         transition={{ duration: 0.5 }}
       >
         <ThumbnailContainer>
-          {product.images.map((image: string, index: number) => (
+          {product?.images?.map((image: string, index: number) => (
             <img
               key={index}
               src={image}
@@ -505,7 +518,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product }) => {
             <button onClick={() => setQuantity((q) => q + 1)}>+</button>
           </QuantitySelector>
 
-          <AddToCartButton>ADD TO CART</AddToCartButton>
+          <AddToCartButton>
+            <span onClick={() => handleAddCart()}>ADD TO CART</span>
+          </AddToCartButton>
 
           <ProductDetails>
             <div

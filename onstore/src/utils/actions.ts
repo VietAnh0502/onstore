@@ -202,3 +202,23 @@ export const handleDeleteUserAction = async (id: any) => {
   revalidateTag("list-users")
 }
 
+
+// orrder 
+export const handleAddOrderAction = async (data: any) => {
+  const respon = await fetch(`http://localhost:3002/api/order`, {
+      method: "POST", // Thay đổi method thành POST
+      headers: {
+        "Content-Type": "application/json", // Xác định loại dữ liệu được gửi
+      },
+      body: JSON.stringify({
+          ...data 
+      }),
+    });
+    
+  if (!respon) {
+      return}
+    
+  const res = await respon.json();
+  // revalidateTag("list-users")
+  return res;
+}

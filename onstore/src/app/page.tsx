@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import localFont from "next/font/local";
 import Layout from "./components/Layout";
+import { useRouter } from "next/navigation";
+
 
 interface Product {
   _id: string;
@@ -118,6 +120,10 @@ export default function Home() {
   
   const maxIndex = products.length - visibleCount; // Total number of allowed presses
 
+  const router = useRouter();
+  const hanldeReToDetail = (id: string) => {
+    router.push(`/product/${id}`);
+  }
   return (
     <Layout>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col px-2 pb-2`}>
@@ -176,6 +182,7 @@ export default function Home() {
                     key={product._id}
                     className="flex justify-center items-center "
                     style={{ width: `${100 / visibleCount}%` }}
+                    onClick={()=> hanldeReToDetail(product._id)}
                   >
                     <div className="p-4 box-border w-80">
                       <Image

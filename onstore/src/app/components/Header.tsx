@@ -2,6 +2,9 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { MenuItem } from '@mui/material';
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import MainDrawerList from './main/main.drawerlist';
 
 interface ProductType {
     _id: string;
@@ -33,12 +36,18 @@ const Header: React.FC<HeaderProps> = ({
     setSearchVisible
 }) => {
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
     const toggleMenu = () => setMenuOpen(!isMenuOpen);
 
-    const MenuItem = ({ href, children }: { href: string; children: React.ReactNode }) => (
+    const MenuItemH = ({ href, children }: { href: string; children: React.ReactNode }) => (
         <li><Link href={href}><strong>{children}</strong></Link></li>
     );
+
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setOpen(newOpen);
+      };
+
 
     const ProductTypeLinks = () => (
         <div className="absolute transform -translate-x-1/3 hover-to-show bg-white shadow-inner w-auto transition-all rounded-md z-10 group-hover:flex p-2">
@@ -65,14 +74,14 @@ const Header: React.FC<HeaderProps> = ({
 
             <nav className={`flex-grow items-center justify-center md:flex ${isMenuOpen ? 'hidden' : 'hidden md:flex'}`}>
                 <ul className="flex space-x-6">
-                    <MenuItem href="/">Homepage</MenuItem>
+                    <MenuItemH href="/">Homepage</MenuItemH>
                     <li className="relative group transition-all mb-4 hover-to-show-link" onMouseEnter={fetchProductTypes}>
                         <strong>Shop</strong>
                         <ProductTypeLinks />
                     </li>
-                    <MenuItem href="/new-arrivals">New Arrivals</MenuItem>
-                    <MenuItem href="/contact">Contact</MenuItem>
-                    <MenuItem href="/sale-deals">Sale Deals</MenuItem>
+                    <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
+                    <MenuItemH href="/contact">Contact</MenuItemH>
+                    <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
                 </ul>
             </nav>
 
@@ -84,14 +93,16 @@ const Header: React.FC<HeaderProps> = ({
                         </svg>
                     </button>
                     <ul className="flex flex-col space-y-4">
-                        <MenuItem href="/">Homepage</MenuItem>
+                        <MenuItemH href="/">Homepage</MenuItemH>
                         <li className="relative group transition-all mb-4 hover-to-show-link" onMouseEnter={fetchProductTypes}>
                             <strong>Shop</strong>
                             <ProductTypeLinks />
                         </li>
-                        <MenuItem href="/new-arrivals">New Arrivals</MenuItem>
-                        <MenuItem href="/contact">Contact</MenuItem>
-                        <MenuItem href="/sale-deals">Sale Deals</MenuItem>
+                        <MenuItemH href="/new-arrivals">New Arrivals</MenuItemH>
+                        <MenuItemH href="/contact">Contact</MenuItemH>
+                        <MenuItemH href="/sale-deals">Sale Deals</MenuItemH>
+
+                        
                     </ul>
                 </div>
             </div>
@@ -106,9 +117,13 @@ const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 <div className="relative cursor-pointer mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                    </svg>
+                        {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg> */}
+                    <div onClick={toggleDrawer(true)}>
+                        <ShoppingCartOutlinedIcon></ShoppingCartOutlinedIcon>
+                    </div>
+
                     <span className="absolute top-[-10px] right-[-10px] bg-yellow-500 text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">1</span>
                 </div>
 
@@ -126,6 +141,12 @@ const Header: React.FC<HeaderProps> = ({
             {isSearchVisible && (
                 <SearchModal setSearchVisible={setSearchVisible} />
             )}
+
+            <MainDrawerList
+                toggleDrawer={toggleDrawer}
+                open={open}
+            ></MainDrawerList>
+            
         </header>
     );
 };

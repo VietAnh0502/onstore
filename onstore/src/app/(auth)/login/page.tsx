@@ -33,6 +33,7 @@ export default function LoginPage() {
             setLoginStatus("Login successful");
 
             // Store the access token in localStorage
+            localStorage.setItem('id', data.id);
             localStorage.setItem('accessToken', data.accessToken);
             setTimeout(() => {
                 router.push('/');

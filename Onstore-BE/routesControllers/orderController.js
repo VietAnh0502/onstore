@@ -32,6 +32,27 @@ exports.createOrder = async (req, res) => {
     }
 };
 
+exports.createOrder2 = async (req, res) => {
+    try {
+        const body = req.body
+        const newOrder = new Order({
+            user: body.userId,
+            items: body?.detail?.map(item => ({
+                product: item.product,
+                quantity: item.quantity,
+                price: item.price,
+            })),
+            total: body.totalPrice,
+        });
+
+        await newOrder.save();
+
+        res.status(201).json(newOrder);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // Get order details
 exports.getCurrentUserOrder = async (req, res) => {
     try {

@@ -4,6 +4,7 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { checkUserAuthStatus, logoutUser, fetchProductTypes } from "@/utils/services"; 
+import StoreProvider from '@/redux/StoreProvider';
 
 interface LayoutProps {
   children: ReactNode;
@@ -86,6 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex flex-col min-h-screen pt-4 w-full ">
+      <StoreProvider>
       <Header
         isUserLoggedIn={isUserLoggedIn}
         username={username}
@@ -99,6 +101,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       />
       <main className="flex-grow">{children}</main>
       <Footer />
+      </StoreProvider>
     </div>
   );
 };
