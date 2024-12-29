@@ -8,6 +8,8 @@ const validateAccessToken = require('../Middleware/arthorizeToken');
 //router.use(validateAccessToken);
 
 // Define routes
+router.post('/api/order', orderController.createOrder2);
+
 router.post('/api/orders', orderController.createOrder);
 router.get('/api/orders/currentUser', orderController.getCurrentUserOrder);
 router.get('/api/orders', orderController.getAllUserOrders);

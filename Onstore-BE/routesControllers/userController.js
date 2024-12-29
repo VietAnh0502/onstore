@@ -63,8 +63,9 @@ const loginUser = async (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 7 * 24 * 60 * 60 * 1000 // Cookie will last for 7 days
         });
+        console.log(user)
 
-        res.status(200).json({ accessToken: ACCESS_TOKEN });
+        res.status(200).json({ accessToken: ACCESS_TOKEN, id: user._id });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
