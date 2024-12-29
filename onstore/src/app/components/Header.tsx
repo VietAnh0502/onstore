@@ -1,6 +1,7 @@
+// Header.tsx
 "use client";
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import Link from 'next/link';
 import { MenuItem } from '@mui/material';
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MainDrawerList from './main/main.drawerlist';
@@ -35,13 +36,12 @@ const Header: React.FC<HeaderProps> = ({
     setSearchVisible
 }) => {
     const [isMenuOpen, setMenuOpen] = useState(false);
-    const router = useRouter(); // Initialize useRouter
     const [open, setOpen] = React.useState(false);
 
     const toggleMenu = () => setMenuOpen(!isMenuOpen);
 
-    const MenuItem = ({ href, children }: { href: string; children: React.ReactNode }) => (
-        <li><button onClick={() => router.push(href)} className="font-bold">{children}</button></li>
+    const MenuItemH = ({ href, children }: { href: string; children: React.ReactNode }) => (
+        <li><Link href={href}><strong>{children}</strong></Link></li>
     );
 
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -50,20 +50,16 @@ const Header: React.FC<HeaderProps> = ({
 
 
     const ProductTypeLinks = () => (
-        <div>
-            <div className="absolute transform -translate-x-1/3 hover-to-show bg-white shadow-inner w-auto transition-all rounded-md z-10 group-hover:flex p-2">
-                <div className="flex space-x-4 ">
-                    {productTypes.map(type => (
-                        <div 
-                            key={type._id} 
-                            className="flex flex-col items-center p-2 w-40 cursor-pointer" 
-                            onClick={() => router.push(`/producttypes/${type._id}`)} // Use router.push
-                        >
+        <div className="absolute transform -translate-x-1/3 hover-to-show bg-white shadow-inner w-auto transition-all rounded-md z-10 group-hover:flex p-2">
+            <div className="flex space-x-4">
+                {productTypes.map(type => (
+                    <div key={type._id} className="flex flex-col items-center p-2 w-40">
+                        <Link href={`/producttypes/${type._id}`} className="flex flex-col items-center"> {/* Changed href here */}
                             <img src={type.image} alt={type.name} className="w-32 h-32 object-cover mb-2" />
                             <span className="font-semibold text-center">{type.name}</span>
-                        </div>
-                    ))}
-                </div>
+                        </Link>
+                    </div>
+                ))}
             </div>
         </div>
     );
@@ -77,8 +73,8 @@ const Header: React.FC<HeaderProps> = ({
             </button>
 
             <nav className={`flex-grow items-center justify-center md:flex ${isMenuOpen ? 'hidden' : 'hidden md:flex'}`}>
-                <ul className="flex space-x-6 ml-50percentage">
-                    <MenuItem href="/">Homepage</MenuItem>
+                <ul className="flex space-x-6">
+                    <MenuItemH href="/">Homepage</MenuItemH>
                     <li className="relative group transition-all mb-4 hover-to-show-link" onMouseEnter={fetchProductTypes}>
                         <strong>Shop</strong>
                         <ProductTypeLinks />

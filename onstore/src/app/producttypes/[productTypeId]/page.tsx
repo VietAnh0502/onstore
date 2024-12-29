@@ -164,7 +164,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
 
       //message.success(`${product.name} added to cart!`); // Show success message
     } catch (error) {
-      message.error(error.message || 'An error occurred while adding to cart');
+      //message.error(error.message || 'An error occurred while adding to cart');
     }
   };
 
@@ -189,7 +189,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
           </motion.div>
         </div>
       }
-      onClick={onClick}
+      //onClick={onClick}
     >
       <Card.Meta title={product.name} description={`Price: $${product.price}`} />
     </Card>

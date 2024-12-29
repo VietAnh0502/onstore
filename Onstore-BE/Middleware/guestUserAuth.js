@@ -18,7 +18,7 @@ const guestUserAuth = async (req, res, next) => {
         
         next();
     } catch (error) {
-        console.error(error)
+        console.error("error in guestUserAuth middleware:");
         res.status(500).json({ message: error});
     }
 };
