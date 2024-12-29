@@ -27,8 +27,8 @@ const MainRowCart = (props: IProps) => {
   const handleBlur = () => {
     if (value < 1) {
       setValue(1);
-    } else if (value > detailCart.detail.quantity) {
-      setValue(detailCart.detail.quantity);
+    } else if (value > detailCart.detail?.stock) {
+      setValue(detailCart.detail?.stock);
     }
   };
 
@@ -63,7 +63,7 @@ const MainRowCart = (props: IProps) => {
           inputProps={{
             step: 1,
             min: 1,
-            max: detailCart.detail.quantity,
+            max: detailCart.detail.stock,
             type: "number",
             "aria-labelledby": "input-slider",
           }}

@@ -3,8 +3,8 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6 mt-10">
-      <div className="container mx-auto px-4">
+    <footer className="bg-gray-800 py-6 ">
+      <div className="container mx-auto px-40">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <h4 className="font-bold">INFORMATION</h4>
@@ -30,9 +30,7 @@ const Footer: React.FC = () => {
             <p>Customer Care: Monday to Saturday: 9am to 8pm</p>
           </div>
         </div>
-        <div className="text-center mt-4">
-          <p>© 2024 Bonanza | All Rights Reserved</p>
-        </div>
+        
       </div>
     </footer>
   );
