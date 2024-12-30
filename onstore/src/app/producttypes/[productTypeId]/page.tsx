@@ -1,11 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, message } from "antd"; // Added message for notifications
+import { Row, Col, Card, message } from "antd";
 import Layout from "@/app/components/Layout";
 import { motion } from "framer-motion";
 import { FiShoppingCart } from "react-icons/fi";
 import { useParams, useRouter } from "next/navigation";
-
 
 
 interface Product {
@@ -47,8 +46,6 @@ const ProductsTypePage = () => {
   const [productType, setProductType] = useState<ProductType | null>(null);
   const { productTypeId } = useParams();
   const router = useRouter();
-  
-
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -76,7 +73,6 @@ const ProductsTypePage = () => {
   if (!productType) {
     return <Layout>Loading...</Layout>;
   }
-  
 
   return (
     <Layout>
@@ -121,13 +117,13 @@ const ProductsTypePage = () => {
 
           <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
             <Row gutter={[16, 16]}>
-            {products.map((product) => (
+              {products.map((product) => (
                 <Col span={6} key={product._id}>
-                  <ProductCard 
-                    product={product} 
+                  <ProductCard
+                    product={product}
                     onClick={() => {
                       router.push(`/producttypes/${productTypeId}/products/${product._id}`, { scroll: true });
-                    }} 
+                    }}
                   />
                 </Col>
               ))}
@@ -147,7 +143,8 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const addToCart = async () => {
+  const addToCart = async (event: React.MouseEvent) => {
+    event.stopPropagation(); // Stop event bubbling
     try {
       const response = await fetch(`http://localhost:3002/api/carts/cartId/items`, {
         method: 'POST',
@@ -155,16 +152,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId: product._id, quantity: 1, price: product.price }), // Assuming 1 is the quantity
+        body: JSON.stringify({ productId: product._id, quantity: 1, price: product.price }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to add product to cart');
       }
 
-      //message.success(`${product.name} added to cart!`); // Show success message
+     // message.success(`${product.name} added to cart!`); // Show success message
     } catch (error) {
-      //message.error(error.message || 'An error occurred while adding to cart');
+     // message.error(error.message || 'An error occurred while adding to cart');
     }
   };
 
