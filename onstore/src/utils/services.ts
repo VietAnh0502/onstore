@@ -61,3 +61,20 @@ export const fetchProductTypes = async (): Promise<ProductType[]> => {
      throw error;
   }
 };
+
+
+export const handleAddOrderServices = async () => {
+  try {
+      const response = await fetch('http://localhost:3002/api/orders', {
+          method: 'POST',
+          credentials: 'include',
+      });
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return await response.json();
+  } catch (error) {
+      console.error('Error logging out', error);
+      throw error;
+  }
+};

@@ -6,7 +6,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  FormLabel,
   Paper,
   Radio,
   RadioGroup,
@@ -16,16 +15,14 @@ import {
   Typography,
   Grid
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { formatPrice, handleCaculateTotalPrice } from "@/utils/functionShare";
+import React, { useEffect, useState, useCallback } from "react";
+import { formatPrice } from "@/utils/functionShare";
 import { handleAddOrderAction } from "@/utils/actions";
-import { useDispatch } from "react-redux";
-import { doPlaceOrderAction } from "@/redux/order/orderSlice";
+import { handleAddOrderServices } from "@/utils/services";
 import { useRouter } from "next/navigation";
 import { message } from "antd";
-import { loadStripe } from "@stripe/stripe-js";
 import HomeStripe from "@/app/stripe/HomeStripe";
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -44,15 +41,31 @@ const Item = styled(Paper)(({ theme }) => ({
   fontSize: "16px",
 }));
 
+interface Icart {
+  _id: string;
+  items: IcartItem[];
+  total: number;
+}
+
+interface IcartItem {
+  product: {
+    _id: string;
+    name: string;
+    images: string[];
+    price: number;
+  };
+  quantity: number;
+   size: string;
+   _id: string;
+}
+
+
 const MainPay = () => {
-  // const { data: session } = useSession();
-  const dispatch = useDispatch();
   const router = useRouter();
   const [value, setValue] = React.useState("TM");
   const [helperText, setHelperText] = React.useState("");
 
   const [name, setName] = useState<string>("");
-  // const [email, setEmail] = useState<string>(session?.user?.email ?? "");
   const [phone, setPhone] = useState<string>("");
   const [address, setAddress] = useState<string>("");
 
@@ -68,13 +81,32 @@ const MainPay = () => {
 
   const [isOpenStripe, setIsOpenStripe] = useState<boolean>(false);
 
-  const cart = useSelector((state: any) => state.order.carts);
+  const [cart, setCart] = useState<Icart | null>(null);
+
+    const getCart = useCallback(async () => {
+      try {
+        const response = await fetch('http://localhost:3002/api/carts/cartId', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if(!response.ok){
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        //console.log("cart data: " + JSON.stringify(data));
+        setCart(data);
+      } catch (error) {
+         console.log("Error fetching cart:", error);
+      }
+    },[]);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
   };
 
-  const totalPrice = handleCaculateTotalPrice();
 
   const handleCheck = () => {
     setIsErrorName(false);
@@ -92,11 +124,6 @@ const MainPay = () => {
       setErrorName("Name is not empty.");
       return false;
     }
-    // if (!email) {
-    //   setIsErrorEmail(true);
-    //   setErrorEmail("Email is not empty.");
-    //   return false;
-    // }
 
     if (!address) {
       setIsErrorAddress(true);
@@ -109,28 +136,15 @@ const MainPay = () => {
       setErrorPhone("Phone is not empty.");
       return false;
     }
+    return true;
   };
 
   const handleAddOrder = async () => {
-    const detail: IDetailOrder[] = cart.map((item: ICart) => {
-      return { quantity: item.quantity, product: item.detail._id,  price: item.detail.price};
-    });
-
-    const id = localStorage.getItem("id")
-    const data: IOrder = {
-      userId: id  || "",
-      address: address,
-      phone: phone,
-      pay: value,
-      totalPrice: totalPrice,
-      detail: detail,
-    };
-
-    const res = await handleAddOrderAction(data);
+    if(!cart) return;
+    const res = await handleAddOrderServices(); 
     console.log(res)
     if (res) {
-      dispatch(doPlaceOrderAction(cart));
-      if (value == "TM") router.push("/");
+      //if (value == "TM") router.push("/");
     } else {
       message.error("Đặt hàng không thành công");
     }
@@ -140,6 +154,11 @@ const MainPay = () => {
     if ((await handleCheck()) == false) return;
     await handleAddOrder();
   };
+
+  useEffect(() => {
+    getCart();
+  },[getCart])
+
 
   useEffect(() => {
     if (value === "TM") {
@@ -169,16 +188,6 @@ const MainPay = () => {
               error={isErrorName}
               helperText={errorName}
             />
-            {/* <TextField
-              label="Email"
-              color="secondary"
-              size="small"
-              focused
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              error={isErrorEmail}
-              helperText={errorEmail}
-            /> */}
             <TextField
               label="Địa chỉ"
               color="secondary"
@@ -214,14 +223,14 @@ const MainPay = () => {
             <Item sx={{ borderRight: "0px" }}>Sản Phẩm </Item>
             <Item>Tạm Tính</Item>
           </Stack>
-          {cart.map((item: ICart) => {
+          {cart?.items?.map((item: IcartItem) => {
             return (
               <Stack direction="row" key={item._id}>
                 <Item sx={{ borderRight: "0px", fontWeight: 500 }}>
-                  {item.detail.name} x{item.quantity}{" "}
+                  {item.product.name} x{item.quantity}{" "}
                 </Item>
                 <Item sx={{ fontWeight: 500 }}>
-                  {formatPrice(item.detail.price * item.quantity)}₫
+                  {formatPrice(item.product.price * item.quantity)}₫
                 </Item>
               </Stack>
             );
@@ -233,7 +242,7 @@ const MainPay = () => {
           </Stack>
           <Stack direction="row">
             <Item sx={{ borderRight: "0px" }}>Tổng </Item>
-            <Item>{formatPrice(handleCaculateTotalPrice())}₫</Item>
+            <Item>{cart ? formatPrice(cart.total) : formatPrice(0)}₫</Item>
           </Stack>
         </Box>
         <Box>
@@ -257,12 +266,12 @@ const MainPay = () => {
             <FormHelperText>{helperText}</FormHelperText>
           </FormControl>
         </Box>
-        {isOpenStripe && (
-          <HomeStripe
-            handleCheck={handleCheck}
-            handleAddOrder={handleAddOrder}
-          ></HomeStripe>
-        )}
+        {/* {isOpenStripe && (
+          // <HomeStripe
+          //   handleCheck={handleCheck}
+          //   handleAddOrder={handleAddOrder}
+          // ></HomeStripe>
+        )} */}
         {!isOpenStripe && (
           <Box
             sx={{

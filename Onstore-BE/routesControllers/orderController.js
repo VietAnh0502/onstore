@@ -5,14 +5,24 @@ const Cart = require('../Model/cart');
 // Create a new order
 exports.createOrder = async (req, res) => {
     try {
-        const userId = req.user.id; // Get user ID from the verified token
-        const cart = await Cart.findOne({ user: userId });
-        if (!cart) {
-            return res.status(404).json({ message: 'Cart not found for this user' });
+        let cart;
+        let orderData = {};
+
+        if (req.user) {
+            const userId = req.user.id;
+            cart = await Cart.findOne({ user: userId });
+            orderData.user = userId; 
+
+        } else if (req.guestId) {
+             const guestId = req.guestId;
+             cart = await Cart.findOne({ guestID: guestId });
+             orderData.guestID = guestId;
+         } else {
+           return res.status(400).json({ message: 'User or guest ID is required' });
         }
 
         const newOrder = new Order({
-            user: userId,
+            ...orderData,
             items: cart.items.map(item => ({
                 product: item.product,
                 quantity: item.quantity,
@@ -28,30 +38,30 @@ exports.createOrder = async (req, res) => {
 
         res.status(201).json(newOrder);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error:"cannot create order "+ error.message });
     }
 };
 
-exports.createOrder2 = async (req, res) => {
-    try {
-        const body = req.body
-        const newOrder = new Order({
-            user: body.userId,
-            items: body?.detail?.map(item => ({
-                product: item.product,
-                quantity: item.quantity,
-                price: item.price,
-            })),
-            total: body.totalPrice,
-        });
+// exports.createOrder2 = async (req, res) => {
+//     try {
+//         const body = req.body
+//         const newOrder = new Order({
+//             user: body.userId,
+//             items: body?.detail?.map(item => ({
+//                 product: item.product,
+//                 quantity: item.quantity,
+//                 price: item.price,
+//             })),
+//             total: body.totalPrice,
+//         });
 
-        await newOrder.save();
+//         await newOrder.save();
 
-        res.status(201).json(newOrder);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+//         res.status(201).json(newOrder);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
 // Get order details
 exports.getCurrentUserOrder = async (req, res) => {
@@ -82,8 +92,8 @@ exports.updateOrderStatus = async (req, res) => {
     const { status } = req.body; // Expecting the new status in the request body
     try {
         const order = await Order.findById(req.params.orderId);
-        if (!order || order.user.toString() !== req.user.id) {
-            return res.status(404).json({ message: 'Order not found or does not belong to the user' });
+         if (!order || (order.user && order.user.toString() !== req.user.id)) {
+             return res.status(404).json({ message: 'Order not found or does not belong to the user' });
         }
 
         order.status = status; // Update status
@@ -98,8 +108,8 @@ exports.updateOrderStatus = async (req, res) => {
 exports.deleteOrder = async (req, res) => {
     try {
         const order = await Order.findById(req.params.orderId);
-        if (!order || order.user.toString() !== req.user.id) {
-            return res.status(404).json({ message: 'Order not found or does not belong to the user' });
+         if (!order || (order.user && order.user.toString() !== req.user.id)) {
+             return res.status(404).json({ message: 'Order not found or does not belong to the user' });
         }
 
         await Order.findByIdAndDelete(req.params.orderId);

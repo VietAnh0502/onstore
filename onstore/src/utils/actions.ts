@@ -204,21 +204,23 @@ export const handleDeleteUserAction = async (id: any) => {
 
 
 // orrder 
-export const handleAddOrderAction = async (data: any) => {
-  const respon = await fetch(`http://localhost:3002/api/order`, {
-      method: "POST", // Thay đổi method thành POST
+export const handleAddOrderAction = async () => { 
+  try {
+    const respon = await fetch(`http://localhost:3002/api/orders`, { 
+      method: "POST",
+      credentials: 'include',
       headers: {
-        "Content-Type": "application/json", // Xác định loại dữ liệu được gửi
-      },
-      body: JSON.stringify({
-          ...data 
-      }),
+          "Content-Type": "application/json", // Xác định loại dữ liệu được gửi
+        }
     });
     
   if (!respon) {
       return}
-    
+  
   const res = await respon.json();
   // revalidateTag("list-users")
   return res;
+  } catch (error) {
+    throw error // Rethrow the error to be handled by the caller
+  }  
 }

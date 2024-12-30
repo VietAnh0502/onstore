@@ -4,8 +4,12 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: 'User',
+    default: null
+  },
+  guestId: {
+    type: String,
+    default: null,
   },
   items: [{
     product: {

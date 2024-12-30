@@ -126,7 +126,7 @@ const ProductsTypePage = () => {
                   <ProductCard 
                     product={product} 
                     onClick={() => {
-                      router.push(`/producttypes/${productTypeId}/products/${product._id}`, { scroll: true });
+                      //router.push(`/producttypes/${productTypeId}/products/${product._id}`, { scroll: true });
                     }} 
                   />
                 </Col>
@@ -155,7 +155,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId: product._id, quantity: 1 }), // Assuming 1 is the quantity
+        body: JSON.stringify({ productId: product._id, quantity: 1, price: product.price }), // Assuming 1 is the quantity
       });
 
       if (!response.ok) {
@@ -189,7 +189,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
           </motion.div>
         </div>
       }
-      //onClick={onClick}
+      onClick={onClick}
     >
       <Card.Meta title={product.name} description={`Price: $${product.price}`} />
     </Card>
