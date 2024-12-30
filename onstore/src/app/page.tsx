@@ -1,3 +1,4 @@
+// onstore/src/app/page.tsx
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -38,6 +39,11 @@ interface Collection {
   images: string;
   description: string;
   createdAt?: Date;
+}
+
+interface ProductCardProps {
+  product: Product;
+  onClick: () => void;
 }
 
 const geistSans = localFont({
@@ -121,9 +127,30 @@ export default function Home() {
   const maxIndex = products.length - visibleCount; // Total number of allowed presses
 
   const router = useRouter();
-  const hanldeReToDetail = (id: string) => {
-    router.push(`/product/${id}`);
+  const hanldeReToDetail = (id: string, type: string) => {
+    router.push(`/producttypes/${type}/products/${id}`);
   }
+  const handleAddToCart = async (productId: string, price: number) => {
+    try {
+      const response = await fetch(`http://localhost:3002/api/carts/cartId/items`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: productId, quantity: 1, price: price }), // Assuming 1 is the quantity
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add product to cart');
+      }
+
+      //message.success(`${product.name} added to cart!`); // Show success message
+    } catch (error) {
+      //message.error(error.message || 'An error occurred while adding to cart');
+        console.error("Error adding to cart:", error);
+    }
+  };
   return (
     <Layout>
       <div className={`${geistSans.variable} ${geistMono.variable} flex flex-col `}>
@@ -356,7 +383,7 @@ export default function Home() {
             key={product._id}
             className="flex justify-center items-center"
             style={{ width: `${100 / visibleCount}%` }}
-            onClick={() => hanldeReToDetail(product._id)}
+            onClick={() => hanldeReToDetail(product._id, product.type)}
           >
             <div className="relative p-4 box-border w-80 category-item">
               <div className="category-image-container">
@@ -371,7 +398,10 @@ export default function Home() {
                 <div className="category-overlay">
                   <h3>{product.name}</h3>
                   <button className="shop-now-btn">SHOP NOW</button>
-                  <button className="add-to-cart-btn">ADD TO CART</button>
+                  <button className="add-to-cart-btn"  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart(product._id, product.price);
+                  }}>ADD TO CART</button>
                 </div>
               </div>
               <div className="mt-2 text-center">
@@ -444,7 +474,7 @@ export default function Home() {
 
   .category-item:hover .category-overlay {
     opacity: 1;
-  }
+    }
 
   .category-item:hover .category-image-container img {
     transform: scale(1.1);

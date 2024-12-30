@@ -126,7 +126,7 @@ const ProductsTypePage = () => {
                   <ProductCard 
                     product={product} 
                     onClick={() => {
-                      //router.push(`/producttypes/${productTypeId}/products/${product._id}`, { scroll: true });
+                      router.push(`/producttypes/${productTypeId}/products/${product._id}`, { scroll: true });
                     }} 
                   />
                 </Col>
